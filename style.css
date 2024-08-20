@@ -19,10 +19,15 @@
     src: url(fonts/Jost/static/Jost-Bold.ttf) format('truetype'); 
 }
 
+html{
+    scroll-behavior: smooth;
+}
 a {
     text-decoration: none;
     color: inherit;
 }
+
+
 
 body {
     background-color: #ffffff;
@@ -32,6 +37,7 @@ body {
     font-family: Jost, Jost-Fall-M, sans-serif;
 
     position: fixed;
+
 }
 
 .title{
@@ -42,23 +48,47 @@ body {
 }
 
 .leftbar{
-    font-size: max(20px, 3vw);
+    font-size: max(30px, 1.5vw);
     font-weight: 300;
+    left: 1vw;
+}
+
+.rightbar{
+    font-size: max(30px, 1.5vw);
+    font-weight: 300;
+    right: 1vw;
 }
 
 
 #SableFiSh{
-    font-size: max(40px, 6vw);
+    font-size: max(60px, 3vw);
     transform: translate(-50%, 0%);
 }
 #Studio{
-    font-size: max(10px, 1.5vw);
+    font-size: max(15px, 0.75vw);
     transform: translate(-50%, 295%);
-    letter-spacing: max(10px,1.5vw);
+    letter-spacing: max(15px,0.75vw);
 }
 
 
 #Home{
-    margin-top: 5px;
-    margin-left: 10px;
+    margin-top: 0;  
 }
+#Top{
+    margin-top: max(30px, 1.5vw);
+}
+
+#Contact-Me{
+    margin-top: 0;
+}
+#About-Me{
+    margin-top: max(30px, 1.5vw);
+}
+#Portfolio{
+    margin-top: max(60px, 3vw);
+}
+#Download{
+    margin-top: max(90px, 4.5vw);
+}   
+
+
