@@ -1,3 +1,8 @@
+:root{
+    --fontsize-px: 20px;
+    --fontsize-vw: 2vw;
+
+}
 @font-face {
     font-family: Jost;
     src: url(fonts/Jost/Jost-VariableFont_wght.ttf) format('truetype-variations');
@@ -49,26 +54,26 @@ body {
 }
 
 .leftbar{
-    font-size: max(30px, 1.5vw);
+    font-size: calc(max(var(--fontsize-px), var(--fontsize-vw))*1);
     font-weight: 300;
     left: 1vw;
 }
 
 .rightbar{
-    font-size: max(30px, 1.5vw);
+    font-size: calc(max(var(--fontsize-px), var(--fontsize-vw))*1);
     font-weight: 300;
     right: 1vw;
 }
 
 
 #SableFiSh{
-    font-size: max(60px, 3vw);
+    font-size: calc(max(var(--fontsize-px), var(--fontsize-vw))*2);
     transform: translate(-50%, 0%);
 }
 #Studio{
-    font-size: max(15px, 0.75vw);
+    font-size: calc(max(var(--fontsize-px), var(--fontsize-vw))*0.5);
     transform: translate(-50%, 295%);
-    letter-spacing: max(15px,0.75vw);
+    letter-spacing: calc(max(var(--fontsize-px), var(--fontsize-vw))*0.5);
 }
 
 
@@ -76,24 +81,24 @@ body {
     margin-top: 0;  
 }
 #Top{
-    margin-top: max(30px, 1.5vw);
+    margin-top: calc(max(var(--fontsize-px), var(--fontsize-vw))*1);
 }
 
 #Contact-Me{
     margin-top: 0;
 }
 #About-Me{
-    margin-top: max(30px, 1.5vw);
+    margin-top: calc(max(var(--fontsize-px), var(--fontsize-vw))*1);
 }
 #Portfolio{
-    margin-top: max(60px, 3vw);
+    margin-top: calc(max(var(--fontsize-px), var(--fontsize-vw))*2);
 }
 #Download{
-    margin-top: max(90px, 4.5vw);
+    margin-top: calc(max(var(--fontsize-px), var(--fontsize-vw))*3);
 }   
 
 #first_p{
-    padding-top: max(120px, 6vw);
+    padding-top: calc(max(var(--fontsize-px), var(--fontsize-vw))*4);
     text-align: center;
     margin-left: auto;
     margin-right: auto;
