@@ -1,0 +1,64 @@
+@font-face {
+    font-family: Jost;
+    src: url(fonts/Jost/Jost-VariableFont_wght.ttf) format('truetype-variations');
+    font-weight: 100 900;
+}
+
+@font-face {
+    font-family: Jost-Fall-M;
+    src: url(fonts/Jost/static/Jost-Medium.ttf) format('truetype'); 
+}
+
+@font-face {
+    font-family: Jost-Fall-L;
+    src: url(fonts/Jost/static/Jost-Light.ttf) format('truetype'); 
+}
+
+@font-face {
+    font-family: Jost-Fall-B;
+    src: url(fonts/Jost/static/Jost-Bold.ttf) format('truetype'); 
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+body {
+    background-color: #ffffff;
+}
+
+.header{
+    font-family: Jost, Jost-Fall-M, sans-serif;
+
+    position: fixed;
+}
+
+.title{
+    font-weight: 500;
+    font-variation-settings: "wght" 500;
+    font-style: normal;
+    left: 50%;
+}
+
+.leftbar{
+    font-size: max(20px, 3vw);
+    font-weight: 300;
+}
+
+
+#SableFiSh{
+    font-size: max(40px, 6vw);
+    transform: translate(-50%, 0%);
+}
+#Studio{
+    font-size: max(10px, 1.5vw);
+    transform: translate(-50%, 295%);
+    letter-spacing: max(10px,1.5vw);
+}
+
+
+#Home{
+    margin-top: 5px;
+    margin-left: 10px;
+}
