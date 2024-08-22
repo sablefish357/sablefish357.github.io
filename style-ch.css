@@ -24,6 +24,7 @@
     src: url(fonts/Jost/static/Jost-Bold.ttf) format('truetype'); 
 }
 
+
 html{
     scroll-behavior: smooth;
 }
@@ -41,7 +42,7 @@ body {
 
 
 .header{
-    font-family: Jost, Jost-Fall-M, sans-serif;
+    font-family: Jost, Jost-Fall-M, Noto Sans SC, sans-serif;
     position: fixed;
     z-index:1000;
 }
@@ -105,7 +106,7 @@ main{
 }
 
 .first_p{
-    padding-top: calc(max(var(--fontsize-px), var(--fontsize-vw))*4.5);
+    padding-top: calc(max(var(--fontsize-px), var(--fontsize-vw))*4.25);
     text-align: center;
     margin-left: auto;
     margin-right: auto;
