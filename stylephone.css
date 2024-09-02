@@ -1,0 +1,238 @@
+@media (max-width: 766px) {
+    html{
+        scroll-behavior: smooth;
+    }
+    
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
+    
+    body {
+        font-size: 8px;
+        margin: 0;
+        padding: 0;
+        font-family: Jost, Jost-Fall-M, sans-serif;
+        background-color: white;
+        color: black;
+    }
+    
+    p {
+        margin: 0;
+        padding: 0; 
+    }
+    
+    
+    header{
+        height: 5em;
+        width: 100%;
+        position: fixed;
+    
+        display: flex;
+        flex-direction:column;
+        justify-content: center;
+        align-items: center;
+    
+        transition: background-color 0.5s ease, color 0.5s ease;
+    
+        overflow: hidden;
+    }
+    
+    .SableFiSh{
+        padding-top:0.1em ;
+        font-size: 3em;
+        line-height: 0.7;
+        font-weight: 500;
+        font-variation-settings: "wght" 500;
+        z-index:500;
+    }
+    .Studio{
+        font-size: 0.6em;
+        letter-spacing: 1.3em;
+        font-weight: 500;
+        font-variation-settings: "wght" 500;
+        padding-left: 1.3em;
+        z-index:500;
+    }
+    
+    
+    nav {
+        height: 5em;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        z-index:-1;
+        overflow: hidden;
+    }
+    
+    .leftbar{
+        width: 19em;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index:100;
+        overflow: hidden;
+    }
+    
+    .rightbar{
+        width: 19em;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index:100;
+        overflow: hidden;
+    }
+    
+    .rightbar div{
+        padding: 0.5em;
+        font-size: 1.5em;
+        font-weight: 350;
+        font-variation-settings: "wght" 350;
+        z-index:1000;
+    
+    }
+    
+    .leftbar div{
+        padding: 0.5em;
+        font-size: 1.5em;
+        font-weight: 350;
+        font-variation-settings: "wght" 350;
+        z-index:1000;
+    }
+    
+    
+    
+    
+    
+    
+    
+    main{
+        font-weight: 300;
+        font-variation-settings: "wght" 300;
+    }
+    
+    
+    
+    .image-container{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    img {
+        max-width: 90%;
+        padding-top: 5%;
+        padding-bottom: 5%;
+        height: auto;
+    }
+    
+    .img-topless{
+        padding-top: 0%;
+    }
+    
+    .dark-image{
+        background-color: black;
+    }
+    
+    
+    .paragraph{
+        
+        width: 100%;
+        font-weight: 300;
+        font-variation-settings: "wght" 300;
+    }
+    
+    .dark-p{
+        background-color: black;
+        color: white;
+    }
+    
+    .light-p{
+        background-color: white;
+        color: black;
+    }
+    
+    .paragraph p{
+        padding: 5% 10% 5% 10%;
+        font-size: 2em;
+        line-height: 1em;
+    }
+    
+    .first-letter-W {
+        font-size: 1.3em;
+        line-height: 0em;
+        margin-right: -0.1em;
+        font-weight: 250;
+        font-variation-settings: "wght" 250;
+    }
+    
+    .first-letter-T {
+        font-size: 1.3em;
+        line-height: 0em;
+        margin-right: 0em;
+        font-weight: 250;
+        font-variation-settings: "wght" 250;
+    }
+    
+    .youtube_video{
+        position: relative;
+        padding-bottom: 42.1875%;
+        height: 0;
+        overflow: hidden;
+        max-width: 80%;
+        margin: 10px auto;
+    }
+    
+    .youtube_video iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+    
+    
+    
+    
+    footer{
+        background: white;
+        display: flex;
+        height: 7em;
+        align-items: center;
+        justify-content: space-between;
+        overflow: hidden;
+    }
+    .footer-left{
+        width: 40em;
+        display: flex;
+        flex-direction:column;
+    }
+    .footer-container{
+        padding: 1em 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        font-size: 1.2em;
+        font-weight: 500;
+        font-variation-settings: "wght" 500;
+    }
+    
+    .copyright{
+        padding-left: 4em;
+        font-size: 1em;
+        font-weight: 200;
+        font-variation-settings: "wght" 200;
+    }
+    
+    .foot-logo-container{
+        width: 19em;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    footer div{
+        color: black;
+    }
+    
+}
