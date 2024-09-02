@@ -47,6 +47,10 @@ p {
     padding: 0; 
 }
 
+.white{
+    color: white;
+}
+
 
 
 header{
@@ -58,6 +62,10 @@ header{
     flex-direction:column;
     justify-content: center;
     align-items: center;
+
+    transition: background-color 0.5s ease, color 0.5s ease;
+
+    
     
 }
 
@@ -88,18 +96,19 @@ nav {
 }
 
 .leftbar{
-    width: 50%;
+    width: 19em;
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
-
+    z-index:100;
 }
 
 .rightbar{
-    width: 50%;
+    width: 19em;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
+    z-index:100;
 }
 
 .rightbar div{
@@ -208,10 +217,38 @@ img {
 
 footer{
     background: black;
+    display: flex;
+    height: 7em;
+    align-items: center;
+    justify-content: space-between;
+}
+.footer-left{
+    width: 50%;
+    display: flex;
+    flex-direction:column;
+}
+.footer-container{
+    padding: 1em 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    font-size: 1.2em;
+    font-weight: 500;
+    font-variation-settings: "wght" 500;
 }
 
-.logo-container{
+.copyright{
+    padding-left: 2.5em;
+    font-size: 1em;
+    font-weight: 200;
+    font-variation-settings: "wght" 200;
+}
 
+.foot-logo-container{
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 footer div{
