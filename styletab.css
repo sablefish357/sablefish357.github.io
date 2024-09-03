@@ -251,7 +251,7 @@
     }
 
     .stagecontainer{
-        width: 85%;
+        width: 90%;
         padding: 5% 0;
         display: flex;
         align-items: center;
@@ -290,5 +290,65 @@
         font-size: 1em;
         font-weight: 200;
         font-variation-settings: "wght" 200;
+    }
+
+
+
+    .stagepagemain{
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        overflow: hidden;
+        flex-direction: column;
+    }
+
+    .stagepageparagraph{
+        width: 90%;
+        border-top: 1px solid #b1b1b1;
+        padding: 3% 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        overflow: hidden;
+        flex-direction: column;
+    }
+
+    .stagepageparagraph p{
+        font-size: 2em;
+        font-weight: 300;
+        font-variation-settings: "wght" 300;
+        text-align: center;
+    }
+
+    #readme{
+        font-size: 2em;
+        font-weight: 400;
+        font-variation-settings: "wght" 400;
+    }
+
+    .download{
+        width: 90%;
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        overflow: hidden;
+        flex-direction: column;
+        font-size: 1.5em;
+        font-weight: 500;
+        font-variation-settings: "wght" 500;
+    }
+
+    .downloadlink{
+        width: 90%;
+        padding: 1% 0 3% 0;
+        border-bottom: 1px solid #b1b1b1;
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        overflow: hidden;
+        font-size: 2em;
+        font-weight: 500;
+        font-variation-settings: "wght" 500;
     }
 }
