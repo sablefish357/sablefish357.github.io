@@ -89,7 +89,7 @@
         align-items: flex-end;
         z-index:100;
         overflow: hidden;
-        flex-direction: column;
+        flex-direction: column-reverse;
     }
     
     .rightbar div{
