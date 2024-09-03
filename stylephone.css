@@ -23,14 +23,14 @@
     }
 
     .hidden {
-        display: block;
+        display: none;
     }
 
     
     
     
     header{
-        height: 5em;
+        height: 10em;
         width: 100%;
         position: fixed;
     
@@ -63,7 +63,7 @@
     
     
     nav {
-        height: 8em;
+        height: 10em;
         width: 100%;
         display: flex;
         justify-content: space-between;
@@ -94,7 +94,7 @@
     
     .rightbar div{
         padding: 0em 0.5em;
-        font-size: 1.5em;
+        font-size: 2em;
         font-weight: 350;
         font-variation-settings: "wght" 350;
         z-index:1000;
@@ -103,7 +103,7 @@
     
     .leftbar div{
         padding: 0em 0.5em;
-        font-size: 1.5em;
+        font-size: 2em;
         font-weight: 350;
         font-variation-settings: "wght" 350;
         z-index:1000;
@@ -128,7 +128,7 @@
         align-items: center;
     }
     
-    img {
+    .showimg {
         max-width: 90%;
         padding-top: 5%;
         padding-bottom: 5%;
@@ -244,4 +244,55 @@
         color: black;
     }
     
+
+
+    .stagelist{
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        overflow: hidden;
+        flex-direction: column;
+    }
+
+    .stagecontainer{
+        flex-direction: column;
+        width: 90%;
+        padding: 5% 0 1% 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        overflow: hidden;
+        border-bottom: 1px solid #b1b1b1;
+    }
+
+    .firststagecontainer{
+        border-top: 1px solid #b1b1b1;
+    }
+
+    .stageimage{
+        width: 100%;
+        height: auto;
+    }
+
+    .stageparagraph{
+        width: 100%;
+        display: flex;
+        flex-direction:column;
+        align-items: center;
+
+
+    }
+
+    .stagetitle{
+        font-size: 1.7em;
+        font-weight: 500;
+        font-variation-settings: "wght" 500;
+    }
+
+    .stagedate{
+        font-size: 1em;
+        font-weight: 200;
+        font-variation-settings: "wght" 200;
+    }
 }
