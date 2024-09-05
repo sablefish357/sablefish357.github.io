@@ -100,8 +100,9 @@ header{
 
 /* nav bar */
 nav {
+    padding: 0 1%;
     height: 5em;
-    width: 100%;
+    width: 98%;
     display: flex;
     justify-content: space-between;
     z-index:-1;
