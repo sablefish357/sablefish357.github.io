@@ -3,10 +3,13 @@ window.addEventListener('scroll', function() {
     const target1 = document.getElementById('target1').getBoundingClientRect().top;
     const target2 = document.getElementById('target2').getBoundingClientRect().top;
     const target3 = document.getElementById('target3').getBoundingClientRect().top;
+    const target4 = document.getElementById('target4').getBoundingClientRect().top;
+    const target5 = document.getElementById('target5').getBoundingClientRect().top;
     const bottom = document.getElementById('bottom').getBoundingClientRect().top;
 
-    if (target1 <= 40 && target2 >= 40 ||
-        target3 <= 40 && bottom >= 40
+    if ((target1 <= 40 && target2 >= 40) ||
+        (target3 <= 40 && target4 >= 40) ||
+        (target5 <= 40 && bottom >= 40 )
     ) {
         header.style.color = 'white'
     } else{
