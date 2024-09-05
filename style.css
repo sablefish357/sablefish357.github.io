@@ -20,6 +20,7 @@
     src: url(fonts/Jost/static/Jost-Bold.ttf) format('truetype'); 
 }
 
+
 /* main setting */
 html{
     scroll-behavior: smooth;
@@ -44,9 +45,16 @@ img {
 body {
     margin: 0;
     padding: 0;
-    font-family: Jost, Jost-Fall-M, sans-serif;
+    font-family: Jost, Jost-Fall-M, Noto Sans SC, sans-serif;
     background-color: white;
     color: black;
+}
+
+.chinese {
+    display: none;
+}
+.english {
+    display: block;
 }
 
 p {
@@ -469,6 +477,14 @@ footer div{
 }
 
 /* letter cap */
+
+.first-letter{
+    font-size: 1.3em;
+    line-height: 0em;
+    font-weight: 200;
+    font-variation-settings: "wght" 200;
+}
+
 .first-letter-W {
     font-size: 1.3em;
     line-height: 0em;
