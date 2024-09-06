@@ -276,7 +276,7 @@ footer div{
     align-items: center;
     justify-content: space-evenly;
     overflow: hidden;
-    flex-direction: column;
+    flex-direction: column-reverse;
 }
 
 .stagecontainer{
@@ -391,7 +391,7 @@ footer div{
     align-items: center;
     justify-content: space-evenly;
     overflow: hidden;
-    flex-direction: column;
+    flex-direction: column-reverse;
 }
 
 .blogcontainer{
