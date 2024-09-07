@@ -177,6 +177,10 @@ main{
     padding-top: 0%;
 }
 
+.img-bottomless{
+    padding-bottom: 0%;
+}
+
 .img-lesspadding{
     padding: 1% 0;
 }
@@ -202,7 +206,7 @@ main{
 }
 
 .paragraph p{
-    padding: 5% 10% 5% 10%;
+    padding: 5% 10%;
     font-size: 2em;
     line-height: 1em;
 }
