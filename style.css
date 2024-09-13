@@ -591,6 +591,17 @@ audio::-webkit-media-controls-panel {
     font-variation-settings: "wght" 200;
 }
 
+/* larger sc */
+
+@media (min-width: 1440px) {
+    .musicparagraphcontainer{
+        width: 80%;
+    }
+
+    .musicimagecontainer{
+        width: 20%;
+    }
+}
 
 /* laptop */
 @media (min-width: 1024px) {
