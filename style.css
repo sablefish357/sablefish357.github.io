@@ -220,6 +220,7 @@ main{
 }
 
 .paragraph p{
+    text-align: center;
     padding: 5% 10%;
     font-size: 2em;
     line-height: 1em;
