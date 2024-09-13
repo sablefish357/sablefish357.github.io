@@ -20,6 +20,11 @@
     src: url(fonts/Jost/static/Jost-Bold.ttf) format('truetype'); 
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC+css:wght@100..900&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 
 /* main setting */
 html{
@@ -45,7 +50,7 @@ img {
 body {
     margin: 0;
     padding: 0;
-    font-family: Jost, Jost-Fall-M, Noto Sans SC, sans-serif;
+    font-family: Jost, Jost-Fall-M, Noto Sans SC, Noto Sans SC css, Noto Sans JP, Noto Sans, sans-serif;
     background-color: white;
     color: black;
 }
@@ -62,6 +67,10 @@ p {
     padding: 0; 
 }
 
+.invis {
+    visibility: hidden;
+  }
+
 .hidden {
     display: none;
 }
@@ -71,6 +80,11 @@ p {
 }
 .lang.active {
     display: block;
+}
+
+.inverse{
+    background-color: black;
+    color: white;
 }
 
 /* header */
@@ -231,7 +245,6 @@ main{
 
 /*footer*/
 footer{
-    background: white;
     display: flex;
     height: 7em;
     align-items: center;
@@ -265,10 +278,6 @@ footer{
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-
-footer div{
-    color: black;
 }
 
 
@@ -480,6 +489,83 @@ footer div{
     font-variation-settings: "wght" 200;
 }
 
+/* music list */
+
+.musiclist{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    overflow: hidden;
+    flex-direction: column-reverse;
+}
+
+.musiccontainer{
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+    overflow: hidden;
+    border-bottom: 1px solid #b1b1b1; 
+}
+
+.musicimagecontainer{
+    padding: 2.5%;
+}
+
+.firstmusiccontainer{
+    border-top: 1px solid #b1b1b1;
+}
+
+.musicimagecontainer{
+    width: 30%;
+    height: auto;
+}
+
+.musicimage{
+    width: 100%;
+    height: auto;
+}
+
+.musicparagraphcontainer{
+    padding: 2.5%;
+    width: 70%;
+    display: flex;
+    flex-direction:column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.musicparagraph{
+    flex-grow: 1;
+    width: 80%;
+    display: flex;
+    flex-direction:column;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.musictitle{
+    font-size: 2.5em;
+    font-weight: 500;
+    font-variation-settings: "wght" 500;
+}
+
+.musicproducer{
+    font-size: 1.25em;
+    font-weight: 200;
+    font-variation-settings: "wght" 200;
+}
+
+audio {
+    width: 100%;
+    display: block;
+    border-radius: 5px;
+    background-color: #ffffff;
+}
+
+audio::-webkit-media-controls-panel {
+    background-color: #ffffff;
+}
+
 /* letter cap */
 
 .first-letter{
@@ -599,6 +685,10 @@ footer div{
 
     .downloadlink{
         font-size: 3em;
+    }
+
+    audio{
+        max-height: 15px;
     }
 }
 
