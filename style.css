@@ -300,11 +300,11 @@ footer{
     align-items: center;
     justify-content: space-between;
     overflow: hidden;
-    border-bottom: 1px solid #b1b1b1;
+    border-top: 1px solid #b1b1b1;
 }
 
 .firststagecontainer{
-    border-top: 1px solid #b1b1b1;
+    border-bottom: 1px solid #b1b1b1;
 }
 
 .stageimagecontainer{
@@ -415,11 +415,11 @@ footer{
     align-items: center;
     justify-content: space-between;
     overflow: hidden;
-    border-bottom: 1px solid #b1b1b1;
+    border-top: 1px solid #b1b1b1;
 }
 
 .firstblogcontainer{
-    border-top: 1px solid #b1b1b1;
+    border-bottom: 1px solid #b1b1b1;
 }
 
 .blogimagecontainer{
@@ -505,7 +505,7 @@ footer{
     display: flex;
     justify-content: space-between;
     overflow: hidden;
-    border-bottom: 1px solid #b1b1b1; 
+    border-top: 1px solid #b1b1b1; 
 }
 
 .musicimagecontainer{
@@ -513,7 +513,7 @@ footer{
 }
 
 .firstmusiccontainer{
-    border-top: 1px solid #b1b1b1;
+    border-bottom: 1px solid #b1b1b1;
 }
 
 .musicimagecontainer{
