@@ -242,6 +242,10 @@ main{
     height: 100%;
 }
 
+.p143{
+    width: 70%;
+}
+
 /* fish selection */
 .fishselection{
     display: flex;
