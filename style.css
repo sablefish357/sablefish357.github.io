@@ -727,4 +727,11 @@ audio::-webkit-media-controls-panel {
     }
 }
 
+/* s phone */
+@media (max-width: 375px) {
+    body {
+        font-size: 6px;
+    }
+}
+
 
