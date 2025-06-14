@@ -5,7 +5,7 @@ const headHTML = `
 `;
 document.head.insertAdjacentHTML('beforeend', headHTML);
 
-const filename = window.location.pathname.split('/').pop() || 'index.html';
+const filename = window.location.pathname.split('/').pop() || 'index-zh.html';
 const Link = filename.replace('-zh.html','.html');
 
 const headerHTML = `
