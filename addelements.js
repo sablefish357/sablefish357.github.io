@@ -112,4 +112,4 @@ const footerHTML = `
 `;
 document.body.insertAdjacentHTML('beforeend', footerHTML);
 
-
+document.querySelector('main').classList.add('show');
