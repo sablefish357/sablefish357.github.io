@@ -68,31 +68,23 @@ def write_html_head(folder_path: str):
     print("Successfully wrote the header\n")
 
 
-def choose_file(folder_path: str):
+def get_txt_file_path(folder_path: str):
     """
-    Get the file path is folder path
+    Get the txt file path
 
     :param folder_path: the folder path
     :return: a list of en and zh file path
     """
-    file = filedialog.askopenfilename(
-        title="Please choose the blog file path",
-        initialdir=folder_path,
-        filetypes=[("Text Files", "*.txt")]
-    )
-    file_zh = filedialog.askopenfilename(
-        title="Please choose the blog_zh file path",
-        initialdir=folder_path,
-        filetypes=[("Text Files", "*.txt")]
-    )
+    root = Path(folder_path)
 
-    if not file:
-        raise FileNotFoundError("Please choose a file")
+    folder_name = get_folder_name(folder_path)
+    file_name = folder_name + ".txt"
+    file_name_zh = folder_name + "-zh.txt"
 
-    if not file_zh:
-        raise FileNotFoundError("Please choose a zh_file")
+    file_path = root / file_name
+    file_path_zh = root / file_name_zh
 
-    return [file, file_zh]
+    return [file_path, file_path_zh]
 
 
 def txt_to_body_translate(folder_path: str, file_path: str):
@@ -104,12 +96,16 @@ def txt_to_body_translate(folder_path: str, file_path: str):
     :return: html body
     """
 
-    p_regex = r"^/p\{(?P<p_position>[^}]+)\}\s*(?P<content>.*)$"  #match /p{p_position} content
+    p_regex = r"^/p\{(?P<p_position>[^}]+)\}\s*(?P<content>.*)$"  
+    #match /p{p_position} content
+
     p_re = re.compile(p_regex)
 
     i_regex = (r"^/i\{(?P<image_name>[^,}]+)\s*,"
                r"\s*(?P<image_size>[^,}]+)\s*\}"
-               r"\s*(?P<description>.*)$")  # match /i{image_name, image_size} description
+               r"\s*(?P<description>.*)$")  
+    # match /i{image_name, image_size} description
+
     i_re = re.compile(i_regex)
 
     file = Path(file_path).read_text(encoding="utf-8").splitlines()
@@ -120,6 +116,9 @@ def txt_to_body_translate(folder_path: str, file_path: str):
     space_6 = " " * 4 * 6
 
     for i, line in enumerate(file):
+        if i == 0:
+            continue
+
         line = line.strip()
         if not line:
             continue
@@ -133,15 +132,16 @@ def txt_to_body_translate(folder_path: str, file_path: str):
             image_size = i_match.group("image_size").strip()
             description = i_match.group("description").strip()
 
-            if i == 0:
+            if i == 1:
                 body += (space_4 + "<div class=\"image-container\">\n" +
-                         space_5 + "<img src=\"/blogs/" + get_folder_name(folder_path) +
+                         space_5 + "<img src=\"/blogs/" + 
+                         get_folder_name(folder_path) +
                          "/" + image_name + "\" " +
                          "alt=\"" + description + "\" " +
                          "class=\"showimg img-topless\">\n" +
                          space_4 + "</div>\n\n")
 
-            if i != 0:
+            if i != 1:
 
                 if "70" in image_size:
                     image_class = "blogimgsize70"
@@ -151,10 +151,13 @@ def txt_to_body_translate(folder_path: str, file_path: str):
                     image_class = ""
 
                 body += (space_4 + "<div class=\"blogparagraphimg\">\n" +
-                         space_5 + "<img src=\"/blogs/" + get_folder_name(folder_path) +
+                         space_5 + "<img src=\"/blogs/" + 
+                         get_folder_name(folder_path) +
                          "/" + image_name + "\" " +
                          "alt=\"" + description + "\" " +
                          "class=\"blogshowimg " + image_class + "\">\n" +
+                         space_5 + "<figcaption>" + 
+                         description + "</figcaption>\n" +
                          space_4 + "</div>\n\n")
 
             print("Image added")
@@ -177,7 +180,8 @@ def txt_to_body_translate(folder_path: str, file_path: str):
                 else:
                     position = ""
 
-            body += (space_4 + "<div class=\"blogpageparagraph " + position + "\">\n" +
+            body += (space_4 + "<div class=\"blogpageparagraph " + 
+                     position + "\">\n" +
                      space_5 + "<p>\n" +
                      content + "\n" +
                      space_5 + "</p>\n" +
@@ -195,7 +199,7 @@ def write_html_body(folder_path: str):
     :param folder_path: the folder path
     :return: None
     """
-    file_path = choose_file(folder_path)
+    file_path = get_txt_file_path(folder_path)
 
     body = txt_to_body_translate(folder_path, file_path[0])
 
