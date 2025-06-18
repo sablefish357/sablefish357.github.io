@@ -17,40 +17,30 @@ def choose_folder():
 
     if not folder:
         raise FileNotFoundError("Please choose a folder")
+
+    folder = Path(folder)
     return folder
 
 
-def get_folder_name(folder_path: str):
-    """
-    Use folder path to get folder name
-
-    :param folder_path: the folder path
-    :return: the folder name.
-    """
-    folder_parts = folder_path.split("/")
-    return folder_parts.pop()
-
-
-def get_html_file_path(folder_path: str):
+def get_html_file_path(folder_path: Path):
     """
     Use folder path to get file path
 
     :param folder_path: the folder path
     :return: a list of both en and zh file path
     """
-    root = Path(folder_path)
 
-    folder_name = get_folder_name(folder_path)
+    folder_name = folder_path.name
     file_name = folder_name + ".html"
     file_name_zh = folder_name + "-zh.html"
 
-    file_path = root / file_name
-    file_path_zh = root / file_name_zh
+    file_path = folder_path / file_name
+    file_path_zh = folder_path / file_name_zh
 
     return [file_path, file_path_zh]
 
 
-def write_html_head(folder_path: str):
+def write_html_head(folder_path: Path):
     """
     Write both head of the html file
 
@@ -68,26 +58,25 @@ def write_html_head(folder_path: str):
     print("Successfully wrote the header\n")
 
 
-def get_txt_file_path(folder_path: str):
+def get_txt_file_path(folder_path: Path):
     """
     Get the txt file path
 
     :param folder_path: the folder path
     :return: a list of en and zh file path
     """
-    root = Path(folder_path)
 
-    folder_name = get_folder_name(folder_path)
+    folder_name = folder_path.name
     file_name = folder_name + ".txt"
     file_name_zh = folder_name + "-zh.txt"
 
-    file_path = root / file_name
-    file_path_zh = root / file_name_zh
+    file_path = folder_path / file_name
+    file_path_zh = folder_path / file_name_zh
 
     return [file_path, file_path_zh]
 
 
-def txt_to_body_translate(folder_path: str, file_path: str):
+def txt_to_body_translate(folder_path: Path, file_path: Path):
     """
     Translate the choose file to html body
 
@@ -108,7 +97,7 @@ def txt_to_body_translate(folder_path: str, file_path: str):
 
     i_re = re.compile(i_regex)
 
-    file = Path(file_path).read_text(encoding="utf-8").splitlines()
+    file = file_path.read_text(encoding="utf-8").splitlines()
     body = ""
 
     space_4 = " " * 4 * 4
@@ -135,7 +124,7 @@ def txt_to_body_translate(folder_path: str, file_path: str):
             if i == 1:
                 body += (space_4 + "<div class=\"image-container\">\n" +
                          space_5 + "<img src=\"/blogs/" + 
-                         get_folder_name(folder_path) +
+                         folder_path.name +
                          "/" + image_name + "\" " +
                          "alt=\"" + description + "\" " +
                          "class=\"showimg img-topless\">\n" +
@@ -152,7 +141,7 @@ def txt_to_body_translate(folder_path: str, file_path: str):
 
                 body += (space_4 + "<div class=\"blogparagraphimg\">\n" +
                          space_5 + "<img src=\"/blogs/" + 
-                         get_folder_name(folder_path) +
+                         folder_path.name +
                          "/" + image_name + "\" " +
                          "alt=\"" + description + "\" " +
                          "class=\"blogshowimg " + image_class + "\">\n" +
@@ -165,9 +154,6 @@ def txt_to_body_translate(folder_path: str, file_path: str):
         elif p_match:
             p_position = p_match.group("p_position")
             content = p_match.group("content")
-
-            content = textwrap.fill(content, width=50)
-            content = textwrap.indent(content, space_6)
 
             if "end" in p_position:
                 if "start" in p_position:
@@ -183,7 +169,7 @@ def txt_to_body_translate(folder_path: str, file_path: str):
             body += (space_4 + "<div class=\"blogpageparagraph " + 
                      position + "\">\n" +
                      space_5 + "<p>\n" +
-                     content + "\n" +
+                     space_6 + content + "\n" +
                      space_5 + "</p>\n" +
                      space_4 + "</div>\n\n")
 
@@ -192,7 +178,7 @@ def txt_to_body_translate(folder_path: str, file_path: str):
     return body
 
 
-def write_html_body(folder_path: str):
+def write_html_body(folder_path: Path):
     """
     Write html body
 
@@ -220,7 +206,7 @@ def write_html_body(folder_path: str):
     print("Successfully wrote the body")
 
 
-def write_html_tail(folder_path: str):
+def write_html_tail(folder_path: Path):
     """
     Write html tail
 
