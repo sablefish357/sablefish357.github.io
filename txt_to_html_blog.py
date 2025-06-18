@@ -100,10 +100,6 @@ def txt_to_body_translate(folder_path: Path, file_path: Path):
     file = file_path.read_text(encoding="utf-8").splitlines()
     body = ""
 
-    space_4 = " " * 4 * 4
-    space_5 = " " * 4 * 5
-    space_6 = " " * 4 * 6
-
     for i, line in enumerate(file):
         if i == 0:
             continue
@@ -122,13 +118,10 @@ def txt_to_body_translate(folder_path: Path, file_path: Path):
             description = i_match.group("description").strip()
 
             if i == 1:
-                body += (space_4 + "<div class=\"image-container\">\n" +
-                         space_5 + "<img src=\"/blogs/" + 
-                         folder_path.name +
-                         "/" + image_name + "\" " +
-                         "alt=\"" + description + "\" " +
-                         "class=\"showimg img-topless\">\n" +
-                         space_4 + "</div>\n\n")
+                body += f"""\
+                <div class="image-container">
+                    <img src="/blogs/{folder_path.name}/{image_name}" alt="{description}" class="showimg img-topless">
+                </div>\n\n"""
 
             if i != 1:
 
@@ -138,16 +131,12 @@ def txt_to_body_translate(folder_path: Path, file_path: Path):
                     image_class = "blogimgsize50"
                 else:
                     image_class = ""
-
-                body += (space_4 + "<div class=\"blogparagraphimg\">\n" +
-                         space_5 + "<img src=\"/blogs/" + 
-                         folder_path.name +
-                         "/" + image_name + "\" " +
-                         "alt=\"" + description + "\" " +
-                         "class=\"blogshowimg " + image_class + "\">\n" +
-                         space_5 + "<figcaption>" + 
-                         description + "</figcaption>\n" +
-                         space_4 + "</div>\n\n")
+            
+                body += f"""\
+                <div class="blogparagraphimg">
+                    <img src="/blogs/{folder_path.name}/{image_name}" alt="{description}" class="blogshowimg {image_class}">
+                    <figcaption>{description}</figcaption>
+                </div>\n\n"""
 
             print("Image added")
 
@@ -166,12 +155,12 @@ def txt_to_body_translate(folder_path: Path, file_path: Path):
                 else:
                     position = ""
 
-            body += (space_4 + "<div class=\"blogpageparagraph " + 
-                     position + "\">\n" +
-                     space_5 + "<p>\n" +
-                     space_6 + content + "\n" +
-                     space_5 + "</p>\n" +
-                     space_4 + "</div>\n\n")
+            body +=f"""\
+                <div class="blogpageparagraph {position}">
+                    <p>
+                        {content}
+                    </p>
+                </div>\n\n"""
 
             print("Paragraph added")
 
