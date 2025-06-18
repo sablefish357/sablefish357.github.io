@@ -10,7 +10,7 @@ def get_blog_list_path():
     :return: a list of blog list path
     """
 
-    return ["./blog.html", "./blog-zh.html"]
+    return [Path("./blog.html"), Path("./blog-zh.html")]
 
 
 def write_blog_list_head():
@@ -54,8 +54,6 @@ def get_all_blog_folders():
 
     folder_list.sort(key=folder_date_key)
 
-    print(folder_list)
-
     return folder_list
 
 
@@ -79,10 +77,10 @@ def get_body_part_of_blog_list(folder_path: Path, is_first: bool = False):
 
     i_re = re.compile(i_regex)
 
-    txt_path = get_txt_file_path(str(folder_path))
+    txt_path = get_txt_file_path(folder_path)
 
-    file = Path(txt_path[0]).read_text(encoding="utf-8").splitlines()
-    file_zh = Path(txt_path[1]).read_text(encoding="utf-8").splitlines()
+    file = txt_path[0].read_text(encoding="utf-8").splitlines()
+    file_zh = txt_path[1].read_text(encoding="utf-8").splitlines()
 
     title_match = t_re.match(file[0])
     title_match_zh = t_re.match(file_zh[0])
@@ -93,7 +91,7 @@ def get_body_part_of_blog_list(folder_path: Path, is_first: bool = False):
     else:
         raise ValueError("Title not found in the txt file.")
     
-    date = get_folder_name(folder_path)
+    date = folder_path.name
 
     slash_date = date.replace("-", "/")
 
@@ -137,17 +135,17 @@ def get_body_part_of_blog_list(folder_path: Path, is_first: bool = False):
     body_zh = f"""\
                 <div class="{blog_list_class}">
                     <div class="blogimagecontainer">
-                        <a href="/blogs/{date}/{date}.html">
+                        <a href="/blogs/{date}/{date}-zh.html">
                             <img src="blogs/{date}/{image_name_zh}" alt="{description_zh}" class="blogimage">
                         </a>
                     </div>
                     <div class="blogparagraph">
-                        <a href="/blogs/{date}/{date}.html">
+                        <a href="/blogs/{date}/{date}-zh.html">
                             <div class="blogtitle">
                                 {title_zh}
                             </div>
                         </a>
-                        <a href="/blogs/{date}/{date}.html">
+                        <a href="/blogs/{date}/{date}-zh.html">
                             <div class="blogdate">
                                 {slash_date}
                             </div>
@@ -235,7 +233,7 @@ def blog_list_part_return(part_number: int):
     <body>
         <main>
             <div class="bloglist">
-                <!-- BLOG LIST STARTS HERE -->\n"""
+                <!-- BLOG LIST STARTS HERE -->\n\n"""
 
     head_zh = """\
 <!DOCTYPE html>
@@ -259,7 +257,7 @@ def blog_list_part_return(part_number: int):
     <body>
         <main>
             <div class="bloglist">
-                <!-- BLOG LIST STARTS HERE -->\n"""
+                <!-- BLOG LIST STARTS HERE -->\n\n"""
 
     tail = """\
                 
