@@ -22,13 +22,18 @@ def write_blog_list_head():
 
     path_list = get_blog_list_path()
 
-    with open(path_list[0], "w", encoding="utf-8") as file:
-        file.write(blog_list_part_return(0))
+    try:
+        with open(path_list[0], "w", encoding="utf-8") as file:
+            file.write(blog_list_part_return(0))
 
-    with open(path_list[1], "w", encoding="utf-8") as file:
-        file.write(blog_list_part_return(1))
+        with open(path_list[1], "w", encoding="utf-8") as file:
+            file.write(blog_list_part_return(1))
 
-    print("Successfully wrote the blog list header\n")
+    except Exception as e:
+        print(f"Error writing head for blog_list: {e}")
+        restore_temp_file(path_list)
+        print("Restored the backup file.")
+        sys.exit(1)
 
 
 def get_all_blog_folders():
@@ -49,9 +54,13 @@ def get_all_blog_folders():
                 folder_list.append(thing)
 
     def folder_date_key(folder):
-        m, d, y = map(int, folder.name.split('-'))
-        return (y, m, d)
-
+        try:
+            m, d, y = map(int, folder.name.split('-'))
+            return (y, m, d)
+        except Exception as e:
+            print(f"Error parsing date from folder name '{folder.name}': {e}")
+            return (9999, 99, 99)
+        
     folder_list.sort(key=folder_date_key)
 
     return folder_list
@@ -163,24 +172,28 @@ def write_blog_list_body():
     :return: None
     """
 
+    path_list = get_blog_list_path()
+
     for i, folder in enumerate(get_all_blog_folders()):
 
         if i == 0:
             body_part = get_body_part_of_blog_list(folder, is_first= True)
         else:
             body_part = get_body_part_of_blog_list(folder)
-        
-        path_list = get_blog_list_path()
 
-        with open(path_list[0], "a", encoding="utf-8") as file:
-            file.write(body_part[0])
+        try:
+            with open(path_list[0], "a", encoding="utf-8") as file:
+                file.write(body_part[0])
 
-        print(f"Successfully wrote the blog list body of {folder.name}\n")
+            with open(path_list[1], "a", encoding="utf-8") as file:
+                file.write(body_part[1])
 
-        with open(path_list[1], "a", encoding="utf-8") as file:
-            file.write(body_part[1])
-
-        print(f"Successfully wrote the blog list body of {folder.name} in zh\n")
+            print(f"Added blog list for {folder.name} to blog_list.")
+        except Exception as e:
+            print(f"Error writing body for blog_list {folder.name}: {e}")
+            restore_temp_file(path_list)
+            print("Restored the backup file.")
+            sys.exit(1)
     
 
 
@@ -193,14 +206,17 @@ def write_blog_list_tail():
 
     path_list = get_blog_list_path()
 
-    with open(path_list[0], "a", encoding="utf-8") as file:
-        file.write(blog_list_part_return(2))
+    try:
+        with open(path_list[0], "a", encoding="utf-8") as file:
+            file.write(blog_list_part_return(2))
 
-    with open(path_list[1], "a", encoding="utf-8") as file:
-        file.write(blog_list_part_return(2))
-
-    print("Successfully wrote the blog list tail\n")
-
+        with open(path_list[1], "a", encoding="utf-8") as file:
+            file.write(blog_list_part_return(2))
+    except Exception as e:
+        print(f"Error writing tail for blog_list: {e}")
+        restore_temp_file(path_list)
+        print("Restored the backup file.")
+        sys.exit(1)
 
 
 def blog_list_part_return(part_number: int):
@@ -285,12 +301,21 @@ def generate_blog_list():
     """
     Generate both blog and blog_zh files
     
-    :param folder_path: the folder path
     :return: None
     """
-    write_blog_list_head()
-    write_blog_list_body()
-    write_blog_list_tail()
+
+    save_temp_file(get_blog_list_path())
+
+    try:
+        write_blog_list_head()
+        write_blog_list_body()
+        write_blog_list_tail()
+        delete_temp_file(get_blog_list_path())
+    except Exception as e:
+        print(f"Error generating blog list: {e}")
+        restore_temp_file(get_blog_list_path())
+        print("Restored the backup file.")
+        sys.exit(1)
 
 
 if __name__ == "__main__":
