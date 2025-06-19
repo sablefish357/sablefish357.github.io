@@ -1,8 +1,9 @@
 import re
-import textwrap
 from tkinter import Tk, filedialog
 from pathlib import Path
 
+p_number = 0
+i_number = 0
 
 def choose_folder():
     """
@@ -10,15 +11,26 @@ def choose_folder():
 
     :return: the path of the folder.
     """
-    folder = filedialog.askdirectory(
-        title="Please choose the blog file path",
-        initialdir="./blogs"
-    )
+
+    try:
+        folder = filedialog.askdirectory(
+            title="Please choose the blog file path",
+            initialdir="./blogs"
+        )
+    except Exception as e:
+        print(f"Error selecting folder: {e}")
+        raise e
 
     if not folder:
-        raise FileNotFoundError("Please choose a folder")
+        raise FileNotFoundError("No folder selected.")
 
-    folder = Path(folder)
+    try:
+        folder = Path(folder).relative_to(Path().resolve())
+
+    except Exception as e:
+        print(f"Error: The selected folder is not within the project root: {e}")
+        raise e
+    
     return folder
 
 
@@ -48,14 +60,15 @@ def write_html_head(folder_path: Path):
     :return: None
     """
     path_list = get_html_file_path(folder_path)
+    try:
+        with open(path_list[0], "w", encoding="utf-8") as file:
+            file.write(blog_part_return(0))
 
-    with open(path_list[0], "w", encoding="utf-8") as file:
-        file.write(blog_part_return(0))
-
-    with open(path_list[1], "w", encoding="utf-8") as file:
-        file.write(blog_part_return(1))
-
-    print("Successfully wrote the header\n")
+        with open(path_list[1], "w", encoding="utf-8") as file:
+            file.write(blog_part_return(1))
+    except Exception as e:
+        print(f"Error writing head for {folder_path.name}: {e}")
+        raise e
 
 
 def get_txt_file_path(folder_path: Path):
@@ -85,6 +98,8 @@ def txt_to_body_translate(folder_path: Path, file_path: Path):
     :return: html body
     """
 
+    global p_number, i_number
+
     p_regex = r"^/p\{(?P<p_position>[^}]+)\}\s*(?P<content>.*)$"  
     #match /p{p_position} content
 
@@ -97,7 +112,12 @@ def txt_to_body_translate(folder_path: Path, file_path: Path):
 
     i_re = re.compile(i_regex)
 
-    file = file_path.read_text(encoding="utf-8").splitlines()
+    try:
+        file = file_path.read_text(encoding="utf-8").splitlines()
+    except Exception as e:
+        print(f"Error reading file {file_path.name}: {e}")
+        raise e
+    
     body = ""
 
     for i, line in enumerate(file):
@@ -116,6 +136,8 @@ def txt_to_body_translate(folder_path: Path, file_path: Path):
             image_name = i_match.group("image_name").strip()
             image_size = i_match.group("image_size").strip()
             description = i_match.group("description").strip()
+
+            i_number += 1
 
             if i == 1:
                 body += f"""\
@@ -138,11 +160,11 @@ def txt_to_body_translate(folder_path: Path, file_path: Path):
                     <figcaption>{description}</figcaption>
                 </div>\n\n"""
 
-            print("Image added")
-
         elif p_match:
             p_position = p_match.group("p_position")
             content = p_match.group("content")
+
+            p_number += 1
 
             if "end" in p_position:
                 if "start" in p_position:
@@ -162,8 +184,6 @@ def txt_to_body_translate(folder_path: Path, file_path: Path):
                     </p>
                 </div>\n\n"""
 
-            print("Paragraph added")
-
     return body
 
 
@@ -174,25 +194,32 @@ def write_html_body(folder_path: Path):
     :param folder_path: the folder path
     :return: None
     """
+
+    global p_number, i_number
+
     file_path = get_txt_file_path(folder_path)
 
     body = txt_to_body_translate(folder_path, file_path[0])
+    print(f"Number of paragraphs: {p_number}  " +
+          f"Number of images: {i_number}  in {file_path[0].name}")
 
-    print("Successfully translated the body-en\n")
-
+    p_number = 0
+    i_number = 0
     body_zh = txt_to_body_translate(folder_path, file_path[1])
-
-    print("Successfully translated the body-zh\n")
+    print(f"Number of paragraphs: {p_number}  " +
+          f"Number of images: {i_number}  in {file_path[1].name}")
 
     path_list = get_html_file_path(folder_path)
 
-    with open(path_list[0], "a", encoding="utf-8") as file:
-        file.write(body)
+    try:
+        with open(path_list[0], "a", encoding="utf-8") as file:
+            file.write(body)
 
-    with open(path_list[1], "a", encoding="utf-8") as file:
-        file.write(body_zh)
-
-    print("Successfully wrote the body")
+        with open(path_list[1], "a", encoding="utf-8") as file:
+            file.write(body_zh)
+    except Exception as e:
+        print(f"Error writing body for {folder_path.name}: {e}")
+        raise e
 
 
 def write_html_tail(folder_path: Path):
@@ -205,13 +232,15 @@ def write_html_tail(folder_path: Path):
 
     path_list = get_html_file_path(folder_path)
 
-    with open(path_list[0], "a", encoding="utf-8") as file:
-        file.write(blog_part_return(2))
+    try:
+        with open(path_list[0], "a", encoding="utf-8") as file:
+            file.write(blog_part_return(2))
 
-    with open(path_list[1], "a", encoding="utf-8") as file:
-        file.write(blog_part_return(2))
-
-    print("Successfully wrote the tail")
+        with open(path_list[1], "a", encoding="utf-8") as file:
+            file.write(blog_part_return(2))
+    except Exception as e:
+        print(f"Error writing tail for {folder_path.name}: {e}")
+        raise e
 
 
 def blog_part_return(part_number: int):
