@@ -1,3 +1,4 @@
+import sys
 import re
 from tkinter import Tk, filedialog
 from pathlib import Path
@@ -51,6 +52,59 @@ def get_html_file_path(folder_path: Path):
 
     return [file_path, file_path_zh]
 
+def save_temp_file(file_path: list[Path]):
+    """
+    Save old file if exists as .bak file
+    
+    :param file_path: a list of file path
+    :return: None
+    """
+
+    for file_path in file_path:
+        if file_path.exists():
+            try:
+                backup_path = file_path.with_suffix('.bak')
+                file_path.rename(backup_path)
+            except Exception as e:
+                print(f"Error creating backup for {file_path.name}: {e}")
+                raise e
+            
+def restore_temp_file(file_path: list[Path]):
+    """
+    Delete created html file if exists and restore the backup file from .bak 
+    file
+
+    :param folder_path: the folder path
+    :return: None
+    """
+
+    for file_path in file_path:
+        backup_path = file_path.with_suffix('.bak')
+        if backup_path.exists():
+            try:
+                file_path.unlink(missing_ok=True)
+                backup_path.rename(file_path)
+            except Exception as e:
+                print(f"Error restoring {file_path.name} from backup: {e}")
+                raise e
+            
+def delete_temp_file(file_path: list[Path]):
+    """
+    Delete temporary .bak file
+
+    :param file_path: a list of file path
+    :return: None
+    """
+
+    for file_path in file_path:
+        backup_path = file_path.with_suffix('.bak')
+        if backup_path.exists():
+            try:
+                backup_path.unlink(missing_ok=True)
+            except Exception as e:
+                print(f"Error deleting backup {backup_path.name}: {e}")
+                raise e
+
 
 def write_html_head(folder_path: Path):
     """
@@ -68,7 +122,9 @@ def write_html_head(folder_path: Path):
             file.write(blog_part_return(1))
     except Exception as e:
         print(f"Error writing head for {folder_path.name}: {e}")
-        raise e
+        restore_temp_file(path_list)
+        print("Restored the backup file.")
+        sys.exit(1)
 
 
 def get_txt_file_path(folder_path: Path):
@@ -219,7 +275,9 @@ def write_html_body(folder_path: Path):
             file.write(body_zh)
     except Exception as e:
         print(f"Error writing body for {folder_path.name}: {e}")
-        raise e
+        restore_temp_file(path_list)
+        print("Restored the backup file.")
+        sys.exit(1)
 
 
 def write_html_tail(folder_path: Path):
@@ -240,7 +298,9 @@ def write_html_tail(folder_path: Path):
             file.write(blog_part_return(2))
     except Exception as e:
         print(f"Error writing tail for {folder_path.name}: {e}")
-        raise e
+        restore_temp_file(path_list)
+        print("Restored the backup file.")
+        sys.exit(1)
 
 
 def blog_part_return(part_number: int):
@@ -324,10 +384,21 @@ def translate_blog():
 
     :return: None
     """
+    
     folder_path = choose_folder()
-    write_html_head(folder_path)
-    write_html_body(folder_path)
-    write_html_tail(folder_path)
+    save_temp_file(get_html_file_path(folder_path))
+    
+    try:
+        write_html_head(folder_path)
+        write_html_body(folder_path)
+        write_html_tail(folder_path)
+        delete_temp_file(get_html_file_path(folder_path))
+
+    except Exception as e:
+        print(f"Error translating blog in {folder_path.name}: {e}")
+        restore_temp_file(get_html_file_path(folder_path))
+        print("Restored the backup file.")
+        sys.exit(1)
 
 
 if __name__ == "__main__":
