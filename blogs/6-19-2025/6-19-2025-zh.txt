@@ -1,0 +1,3 @@
+/t{} 测试博客2
+/i{blockpool v1.jpg, 90} 这是一个测试照片
+/p{start end} 这是一条测试信息
