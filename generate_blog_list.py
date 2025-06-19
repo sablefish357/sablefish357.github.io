@@ -311,6 +311,7 @@ def generate_blog_list():
         write_blog_list_body()
         write_blog_list_tail()
         delete_temp_file(get_blog_list_path())
+        print("Blog list generated successfully.")
     except Exception as e:
         print(f"Error generating blog list: {e}")
         restore_temp_file(get_blog_list_path())

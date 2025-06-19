@@ -393,6 +393,10 @@ def translate_blog():
         write_html_body(folder_path)
         write_html_tail(folder_path)
         delete_temp_file(get_html_file_path(folder_path))
+        print("Translation completed successfully.\n")
+
+        from generate_blog_list import generate_blog_list
+        generate_blog_list() 
 
     except Exception as e:
         print(f"Error translating blog in {folder_path.name}: {e}")
