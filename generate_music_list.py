@@ -1,4 +1,5 @@
 from pathlib import Path
+from generate_blog_page import *
 
 def get_music_folder_path():
     """
@@ -7,6 +8,8 @@ def get_music_folder_path():
     :return: a Path object for the music folder
     """
 
+    return Path("./music")
+
 
 def get_music_list_path():
     """
@@ -14,6 +17,8 @@ def get_music_list_path():
     
     :return: a list of Path objects for the music list HTML files
     """
+
+    return [Path("./music.html"), Path("./music-zh.html")]
 
 
 def write_music_list_head():
@@ -66,12 +71,95 @@ def music_list_part_return(part_number: int):
     :return: str of head or tail
     """
 
+    head = """\
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="This is SableFiSh's personal page.">
+        <meta name="keywords" content="Blender,SableFiSh,MMD,mikumikudance ">
+
+        <title>
+            SableFiSh
+        </title>
+
+        <link rel="icon" type="image/jpg" href="image/favicon.jpg">
+        <link rel="stylesheet" href="style.css">
+
+        <script src="/addelements.js" defer></script>
+    </head> 
+
+    <body>
+        <main>
+            <div class="musiclist">
+                <!-- MUSIC LIST STARTS HERE-->\n\n"""
+
+    head_zh = """\
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="This is SableFiSh's personal page.">
+        <meta name="keywords" content="Blender,SableFiSh,MMD,mikumikudance ">
+
+        <title>
+            SableFiSh
+        </title>
+
+        <link rel="icon" type="image/jpg" href="image/favicon.jpg">
+        <link rel="stylesheet" href="style.css">
+
+        <script src="/addelements_zh.js" defer></script>
+    </head> 
+
+    <body>
+        <main>
+        
+            <div class="musiclist">
+                <!-- MUSIC LIST STARTS HERE-->\n\n"""
+
+    tail = """\
+            </div>
+
+        </main>
+
+        <script src="script.js"></script>
+        
+    </body>
+</html>"""
+
+    match part_number:
+        case 0:
+            return head
+        case 1:
+            return head_zh
+        case 2:
+            return tail
+        case _:
+            raise ValueError("Wrong part number.")
+
 
 def generate_music_list():
     """Generate the music list HTML files from music folder.
     
     :return: None
     """
+    
+    save_temp_file(get_music_list_path())
+
+    try:
+        write_music_list_head()
+        write_music_list_body()
+        write_music_list_tail()
+        delete_temp_file(get_music_list_path())
+        print("Music list generated successfully.")
+    except Exception as e:
+        print(f"Error generating music list: {e}")
+        restore_temp_file(get_music_list_path())
+        print("Restored the backup file.")
+        sys.exit(1)
 
 
 if __name__ == "__main__":
