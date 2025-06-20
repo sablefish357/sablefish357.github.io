@@ -28,6 +28,20 @@ def write_music_list_head():
     :return: None
     """
 
+    path_list = get_music_list_path()
+
+    try:
+        with open(path_list[0], "w", encoding="utf-8") as file:
+            file.write(music_list_part_return(0))
+
+        with open(path_list[1], "w", encoding="utf-8") as file:
+            file.write(music_list_part_return(1))
+
+    except Exception as e:
+        print(f"Error writing head for music_list: {e}")
+        restore_temp_file(path_list)
+        print("Restored the backup file.")
+        sys.exit(1)
 
 def generate_music_picture(music_path: Path):
     """
@@ -61,6 +75,21 @@ def write_music_list_tail():
     
     :return: None
     """
+
+    path_list = get_music_list_path()
+
+    try:
+        with open(path_list[0], "a", encoding="utf-8") as file:
+            file.write(music_list_part_return(2))
+
+        with open(path_list[1], "a", encoding="utf-8") as file:
+            file.write(music_list_part_return(2))
+
+    except Exception as e:
+        print(f"Error writing tail for music_list: {e}")
+        restore_temp_file(path_list)
+        print("Restored the backup file.")
+        sys.exit(1)
 
 
 def music_list_part_return(part_number: int):
