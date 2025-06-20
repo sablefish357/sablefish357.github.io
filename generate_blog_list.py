@@ -1,6 +1,6 @@
 import re
 from pathlib import Path
-from txt_to_html_blog import *
+from generate_blog_page import *
 
 
 def get_blog_list_path():
