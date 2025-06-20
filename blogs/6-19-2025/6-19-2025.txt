@@ -1,0 +1,5 @@
+/t{} Fat Dog Has a Fat Ass
+/i{697931750391194_.jpg, 90} The dog's name is Kouichi
+/p{start} Kouichi is a fat dog with stinky feet, and he likes to eat little mouse.
+/i{dog ass.jpg, 70} Who is Kouichi? A dog！
+/p{end} This dog needs exercise, as he is too weak to do too much work.
