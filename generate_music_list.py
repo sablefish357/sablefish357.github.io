@@ -1,4 +1,6 @@
+import sys
 from pathlib import Path
+import eyed3
 from generate_blog_page import *
 
 def get_music_folder_path():
@@ -51,6 +53,29 @@ def generate_music_picture(music_path: Path):
     :return: None
     """
 
+    cover_path = get_music_folder_path() / "cover"
+    cover_path.mkdir(exist_ok=True)
+
+    cover_file = cover_path / (music_path.stem + ".jpg")
+    if cover_file.exists():
+        return
+    
+    try:
+        audio_file = eyed3.load(music_path)
+        if ((audio_file is None) or (audio_file.tag is None) or 
+            (not audio_file.tag.images)):
+            print(f"No cover found for {music_path.name}.")
+            return
+        
+        image_data = audio_file.tag.images[0].image_data
+        with open(cover_file, "wb") as img_file:
+            img_file.write(image_data)
+    except Exception as e:
+        print(f"Error generating cover for {music_path.name}: {e}")
+        restore_temp_file(get_music_list_path())
+        print("Restored the backup file.")
+        sys.exit(1)
+        
 
 def get_body_part_of_music_list(music_path: Path, is_first: bool = False):
     """Get the body part of the music list
