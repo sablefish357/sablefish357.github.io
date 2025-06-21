@@ -1,6 +1,8 @@
 import re
+import sys
 from pathlib import Path
-from generate_blog_page import *
+from generator_help_functions import *
+sys.stdout.reconfigure(encoding='utf-8')
 
 
 def get_blog_list_path():
