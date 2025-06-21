@@ -156,7 +156,7 @@ def get_all_music_files():
         if thing.is_file() and thing.suffix.lower() in {".mp3"}:
             music_files.append(thing)
 
-    music_files.sort(key=lambda f: f.stat().st_mtime)
+    music_files.sort(key=lambda f: f.stat().st_ctime)
     return music_files
 
 
