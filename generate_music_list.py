@@ -1,8 +1,13 @@
 import sys
 from pathlib import Path
 import eyed3
+import logging
 import re
 from generate_blog_page import *
+
+sys.stdout.reconfigure(encoding='utf-8')
+
+logging.getLogger("eyed3").setLevel(logging.ERROR)
 
 def get_music_folder_path():
     """
