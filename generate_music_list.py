@@ -1,6 +1,7 @@
 import sys
 from pathlib import Path
 import eyed3
+import re
 from generate_blog_page import *
 
 def get_music_folder_path():
