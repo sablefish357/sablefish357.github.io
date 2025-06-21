@@ -45,12 +45,13 @@ def write_music_list_head():
         print("Restored the backup file.")
         sys.exit(1)
 
+
 def generate_music_picture(music_path: Path):
     """
     Generate the music cover under ./music/cover
      
     :param music_path: the music file path
-    :return: None
+    :return: the path of the generated cover image, or an empty string if no cover is found
     """
 
     cover_path = get_music_folder_path() / "cover"
@@ -58,26 +59,26 @@ def generate_music_picture(music_path: Path):
 
     cover_file = cover_path / (music_path.stem + ".jpg")
     if cover_file.exists():
-        return
+        return cover_file
     
     try:
         audio_file = eyed3.load(music_path)
         if ((audio_file is None) or (audio_file.tag is None) or 
             (not audio_file.tag.images)):
-            print(f"No cover found for {music_path.name}.")
-            return
+            return None
         
         image_data = audio_file.tag.images[0].image_data
         with open(cover_file, "wb") as img_file:
             img_file.write(image_data)
+
+        return cover_file
+    
     except Exception as e:
-        print(f"Error generating cover for {music_path.name}: {e}")
-        restore_temp_file(get_music_list_path())
-        print("Restored the backup file.")
-        sys.exit(1)
+        return None
         
 
-def get_body_part_of_music_list(music_path: Path, is_first: bool = False):
+def get_body_part_of_music_list(music_path: Path, music_cover: Path,
+                                is_first: bool = False):
     """Get the body part of the music list
     
     :param music_path: the music file path
@@ -87,12 +88,65 @@ def get_body_part_of_music_list(music_path: Path, is_first: bool = False):
     """
 
 
+def get_all_music_files():
+    """
+    Get all music files in the music folder.
+    
+    :return: a list of Path objects for all music files
+    """
+
+    root = get_music_folder_path()
+    everything = root.iterdir()
+    music_files = []
+    for thing in everything:
+        if thing.is_file() and thing.suffix.lower() in {".mp3"}:
+            music_files.append(thing)
+
+    music_files.sort(key=lambda f: f.stat().st_mtime)
+    return music_files
+
+
 def write_music_list_body():
     """
     Write music list body
     
     :return: None
     """
+
+    path_list = get_music_list_path()
+    music_files = get_all_music_files()
+
+    if not music_files:
+        print("No music files found in the music folder.")
+        return
+    
+    for i, music in enumerate(music_files):
+        music_cover = generate_music_picture(music)
+
+        if music_cover is None:
+            print(f"Skipping {music.name} due to missing cover.")
+            continue
+
+        if i == 0:
+            body_part = get_body_part_of_music_list(music,music_cover, 
+                                                    is_first=True)
+        else:
+            body_part = get_body_part_of_music_list(music, music_cover)
+
+        try:
+            with open(path_list[0], "a", encoding="utf-8") as file:
+                file.write(body_part[0])
+
+            with open(path_list[1], "a", encoding="utf-8") as file:
+                file.write(body_part[1])
+
+            print(f"Added music {music.stem} to the list.")
+
+        except Exception as e:
+            print(f"Error writing body for music {music.name}: {e}")
+            restore_temp_file(path_list)
+            print("Restored the backup file.")
+            sys.exit(1)
 
 
 def write_music_list_tail():
