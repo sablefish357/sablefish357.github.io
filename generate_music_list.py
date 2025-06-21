@@ -93,7 +93,7 @@ def get_body_part_of_music_list(music_path: Path, music_cover: Path,
     :return: a string of the body part or None if metadata is missing
     """
 
-    m_regex = r"^(?P<artist>[^-]+)\s*-\s*(?P<title>[^-]+)$"
+    m_regex = r"^(?P<artist>[^-]+)\s*-\s*(?P<title>.+)$"
     # match "artist - title"
 
     m_re = re.compile(m_regex)
