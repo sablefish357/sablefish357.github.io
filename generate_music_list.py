@@ -84,9 +84,58 @@ def get_body_part_of_music_list(music_path: Path, music_cover: Path,
     :param music_path: the music file path
     :param is_first: whether this is the first music in the list
     
-    :return: a list of en and zh string of the body part
+    :return: a string of the body part or None if metadata is missing
     """
 
+    m_regex = r"^(?P<artist>[^-]+)\s*-\s*(?P<title>[^-]+)$"
+    # match "artist - title"
+
+    m_re = re.compile(m_regex)
+
+    m_match = m_re.match(music_path.stem)
+
+    if m_match:
+        artist = m_match.group("artist").strip()
+        title = m_match.group("title").strip()
+    else:
+        return None
+    
+    if is_first:
+        music_class = "musiccontainer firstmusiccontainer"
+    else:
+        music_class = "musiccontainer"
+    
+    body = f"""\
+                <!--{title}-->
+                <div class="{music_class}">
+                    <div class="musicimagecontainer">
+                            <img src="{music_cover}" alt="{title}" class="musicimage">
+                    </div>
+                    <div class="musicparagraphcontainer">
+                        <audio controls class="invis">
+                            <source src="/music/Eye In The Sky - The Alan Parsons Project.mp3" type="audio/mp3">。
+                        </audio>
+                        <div class="musicparagraph">
+                        
+                            <div class="musicproducer">
+                                &nbsp
+                            </div>
+                            <div class="musictitle">
+                                {title}
+                            </div>
+    
+                            <div class="musicproducer">
+                                {artist}
+                            </div>
+                        </div>
+                        <audio controls>
+                            <source src="{music_path}" type="audio/mp3">。
+                        </audio>
+                    </div>
+                </div>\n\n"""
+    
+    return body
+    
 
 def get_all_music_files():
     """
@@ -133,12 +182,16 @@ def write_music_list_body():
         else:
             body_part = get_body_part_of_music_list(music, music_cover)
 
+        if body_part is None:
+            print(f"Skipping {music.name} due to missing metadata.")
+            continue
+
         try:
             with open(path_list[0], "a", encoding="utf-8") as file:
-                file.write(body_part[0])
+                file.write(body_part)
 
             with open(path_list[1], "a", encoding="utf-8") as file:
-                file.write(body_part[1])
+                file.write(body_part)
 
             print(f"Added music {music.stem} to the list.")
 
