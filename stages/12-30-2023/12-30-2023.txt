@@ -1,0 +1,6 @@
+/t{} Street-ver.-Night
+/i{streetnight v1.jpg, 90} A picture of a street at night
+/p{default} The stage includes an opening; please replace it with your own logo.
+/p{} Particle systems for falling leaves need to be cached first.
+/v{} 4.3.2
+/d{https://github.com/sablefish357/Street-ver.-Night-12302023} GitHub
