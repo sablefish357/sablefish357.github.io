@@ -9,6 +9,14 @@ def choose_stage_folder():
     """
 
 
+def get_default_readme_path():
+    """
+    Get the default README file path.
+    
+    :return: the path of the default README file.
+    """
+
+
 def write_stage_page_head(folder_path: Path):
     """
     Write both head of the stage page HTML file.
