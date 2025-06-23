@@ -1,0 +1,5 @@
+/t{} UndergroundPool
+/i{pool v1.jpg, 90} 一张地下泳池的照片
+/p{default} 场景有一个片头, 请用自己的图标代替。
+/v{} 4.2LTS
+/d{https://github.com/sablefish357/undergroundpool-05122021} GitHub
