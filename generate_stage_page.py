@@ -18,7 +18,7 @@ def choose_folder():
             initialdir="./stages"
         )
     except Exception as e:
-        print(f"Error selecting folder: {e}")
+        print(f"Error : When selecting folder.")
         raise e
 
     if not folder:
@@ -28,7 +28,7 @@ def choose_folder():
         folder = Path(folder).relative_to(Path().resolve())
 
     except Exception as e:
-        print(f"Error: The selected folder is not within the project root: {e}")
+        print(f"Error: The selected folder is not within the project root.")
         raise e
     
     return folder
@@ -62,7 +62,7 @@ def write_stage_page_head(folder_path: Path):
             file.write(stage_part_return(1))
 
     except Exception as e:
-        print(f"Error: When writing head for {folder_path.name}")
+        print(f"Error: When writing head for {folder_path.name}.")
         raise e
         
 
@@ -83,7 +83,7 @@ def readme_translate(readme_file: Path):
     try:
         file = readme_file.read_text(encoding="utf-8").splitlines()
     except Exception as e:
-        print(f"Error: When reading file {readme_file.name}")
+        print(f"Error: When reading file {readme_file.name}.")
         raise e
 
     for line in file:
@@ -103,7 +103,7 @@ def readme_translate(readme_file: Path):
                         {content}
                     </p>\n"""
         else:
-            print(f"Error: Undefined line found [{line}] in {readme_file.stem}")
+            print(f"Error: Undefined line found {line} in {readme_file.name}.")
             
     return readme_part
 
@@ -125,24 +125,24 @@ def txt_to_stage_body_translate(folder_path: Path, file_path: Path,
     #match /p{default} content
     p_re = re.compile(p_regex)
 
-    i_regex = (r"^/i\{(?P<image_name>[^,}]+)\s*,"
-               r"\s*(?P<image_size>[^,}]+)\s*\}"
+    i_regex = (r"^/i\{(?P<image_name>[^,}]*)\s*,"
+               r"\s*(?P<image_size>[^,}]*)\s*\}"
                r"\s*(?P<description>.*)$")  
     # match /i{image_name, image_size} description
     i_re = re.compile(i_regex)
 
-    v_regex = r"^/v\{\}\s*(?P<version>.*)$"
-    # match /t{} version
+    v_regex = r"^/v\{(?P<temp>[^}]*)\}\s*(?P<version>.*)$"
+    # match /v{temp} version
     v_re = re.compile(v_regex)
 
-    d_regex = r"^/d\{(?P<link>[^}]+)\}\s*(?P<source>.*)$"
+    d_regex = r"^/d\{(?P<link>[^}]*)\}\s*(?P<source>.*)$"
     # match /d{link} source
     d_re = re.compile(d_regex)
 
     try:
         file = file_path.read_text(encoding="utf-8").splitlines()
     except Exception as e:
-        print(f"Error : When reading file {file_path.name}")
+        print(f"Error : When reading file {file_path.name}.")
         raise e
     
     image_part = ""
@@ -211,7 +211,7 @@ def txt_to_stage_body_translate(folder_path: Path, file_path: Path,
                         </p>
                     </a>\n"""
         else:
-            print(f"Error : Undefined line found [{line}] in {file_path.stem}")
+            print(f"Error : Undefined line found {line} in {file_path.name}.")
 
     if not image_part:
         print(f"Error : No cover image found in {file_path.stem}.")
@@ -277,7 +277,7 @@ def write_stage_page_body(folder_path: Path):
         with open(path_list[1], "a", encoding="utf-8") as file:
             file.write(body_zh)
     except Exception as e:
-        print(f"Error : When writing body for stage {folder_path.name}")
+        print(f"Error : When writing body for stage {folder_path.name}.")
         raise e
 
     return p_number, p_number_zh
@@ -300,7 +300,7 @@ def write_stage_page_tail(folder_path: Path):
         with open(path_list[1], "a", encoding="utf-8") as file:
             file.write(stage_part_return(2))
     except Exception as e:
-        print(f"Error : When writing tail for {folder_path.name}")
+        print(f"Error : When writing tail for {folder_path.name}.")
         raise e
         
     
@@ -376,7 +376,7 @@ def stage_part_return(part_number: int):
         case 2:
             return tail
         case _:
-            raise ValueError("Wrong part number.")
+            raise ValueError("Error : Wrong part number.")
 
 def generate_stage_page():
     """
@@ -395,10 +395,11 @@ def generate_stage_page():
         delete_temp_file(get_html_file_path(folder_path))
 
         print(f"Translated blog page {folder_path.stem}: " +
-              f"added {p_number} paragraphs (en), {p_number_zh} paragraphs (zh)")
+              f"added {p_number} paragraphs (en), " +
+              f"{p_number_zh} paragraphs (zh).")
 
     except Exception as e:
-        print(f"Error translating stage page in {folder_path.name}: {e}")
+        print(f"Error translating stage page in {folder_path.name}: {e}.")
         restore_temp_file(get_html_file_path(folder_path))
         print("Restored the backup file.")
         sys.exit(1)
