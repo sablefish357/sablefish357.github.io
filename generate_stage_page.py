@@ -1,7 +1,11 @@
 import sys
+import re
+from pathlib import Path
 from tkinter import Tk, filedialog
 from generator_help_functions import *
 sys.stdout.reconfigure(encoding='utf-8')
+
+p_number = 0
 
 def choose_folder():
     """
@@ -65,6 +69,17 @@ def write_stage_page_head(folder_path: Path):
         print("Restored the backup file.")
         sys.exit(1)
 
+def readme_translate(readme_file: Path):
+    """
+    Translate the README file to HTML part.
+
+    :param folder_path: the folder path
+    :return: the HTML part of the README file
+    """
+
+    return ""
+
+
 
 def txt_to_stage_body_translate(folder_path: Path, file_path: Path):
     """
@@ -75,6 +90,130 @@ def txt_to_stage_body_translate(folder_path: Path, file_path: Path):
     :return: None
     """
 
+    global p_number
+
+    p_regex = r"^/p\{(?P<default>[^}]+)\}\s*(?P<content>.*)$"  
+    #match /p{default} content
+    p_re = re.compile(p_regex)
+
+    i_regex = (r"^/i\{(?P<image_name>[^,}]+)\s*,"
+               r"\s*(?P<image_size>[^,}]+)\s*\}"
+               r"\s*(?P<description>.*)$")  
+    # match /i{image_name, image_size} description
+    i_re = re.compile(i_regex)
+
+    v_regex = r"^/v\{\}\s*(?P<version>.*)$"
+    # match /t{} version
+    v_re = re.compile(v_regex)
+
+    d_regex = r"^/d\{(?P<link>[^}]+)\}\s*(?P<source>.*)$"
+    # match /d{link} source
+    d_re = re.compile(d_regex)
+
+    try:
+        file = file_path.read_text(encoding="utf-8").splitlines()
+    except Exception as e:
+        print(f"Error reading file {file_path.name}: {e}")
+        raise e
+    
+    image_part = ""
+    paragraph_part = ""
+    download_part = ""
+    paragraph_version = ""
+
+    have_default = False
+
+    for i, line in enumerate(file):
+        if i == 0:
+            continue
+
+        line = line.strip()
+        if not line:
+            continue
+
+        i_match = i_re.match(line)
+        p_match = p_re.match(line)
+        v_match = v_re.match(line)
+        d_match = d_re.match(line)
+
+        if i_match:
+            if i == 1:
+                image_name = i_match.group("image_name").strip()
+                description = i_match.group("description").strip()
+
+                image_part += f"""\
+                <div class="image-container">
+                    <img src="/stages/{folder_path.name}/{image_name}" alt="{description}" class="showimg img-topless">
+                </div>\n\n"""
+
+            else:
+                continue
+            
+        elif p_match:
+            default = p_match.group("default").strip()
+            content = p_match.group("content").strip()
+
+            if "default" in default:
+                have_default = True
+
+            paragraph_part += f"""\
+                    <p>
+                        {content}
+                    <p>\n"""
+            
+            p_number += 1
+
+        elif v_match:
+            version = v_match.group("version").strip()
+
+            paragraph_version = f"""\
+                    <p>
+                        {version}
+                    <p>\n"""
+
+        elif d_match:
+            link = d_match.group("link").strip()
+            source = d_match.group("source").strip()
+
+            download_part += f"""\
+                    <a href="{link}" target="_blank">
+                        <p>
+                            {source}
+                        </p>
+                    </a>\n"""
+        else:
+            print(f"Undefined line found [{line}] in {file_path.stem}")
+
+    if not image_part:
+        print(f"No cover image found in {file_path.stem}.")
+
+    paragraph_start = """\
+                <div class="stagepageparagraph">
+                    <p id="readme">
+                        ReadMe
+                    </p>\n"""
+    
+    if have_default:
+        paragraph_default = readme_translate(get_default_readme_path())
+    else:
+        paragraph_default = ""
+    
+    paragraph_end = """\
+                </div>\n"""
+    
+    download_start = """\
+                <div class="download">
+                    <p>
+                        下载链接:
+                    </p>
+                </div>
+                <div class="downloadlink">\n\n"""
+    
+    download_end = """\
+                </div>\n"""
+    
+    return image_part + paragraph_start + paragraph_default + paragraph_part + paragraph_version + paragraph_end + download_start + download_part + download_end
+    
 
 def write_stage_page_body(folder_path: Path):
     """
@@ -83,6 +222,31 @@ def write_stage_page_body(folder_path: Path):
     :param folder_path: the folder path
     :return: None
     """
+
+    global p_number
+
+    file_path = get_txt_file_path(folder_path)
+
+    body = txt_to_stage_body_translate(folder_path, file_path[0])
+    print(f"Number of additional paragraphs: {p_number} in {file_path[0].name}")
+
+    p_number = 0
+    body_zh = txt_to_stage_body_translate(folder_path, file_path[1])
+    print(f"Number of additional paragraphs: {p_number} in {file_path[1].name}")
+
+    path_list = get_html_file_path(folder_path)
+    
+    try:
+        with open(path_list[0], "a", encoding="utf-8") as file:
+            file.write(body)
+
+        with open(path_list[1], "a", encoding="utf-8") as file:
+            file.write(body_zh)
+    except Exception as e:
+        print(f"Error writing body for stage {folder_path.name}: {e}")
+        restore_temp_file(path_list)
+        print("Restored the backup file.")
+        sys.exit(1)
 
 
 def write_stage_page_tail(folder_path: Path):
