@@ -5,8 +5,6 @@ from tkinter import Tk, filedialog
 from generator_help_functions import *
 sys.stdout.reconfigure(encoding='utf-8')
 
-p_number = 0
-
 def choose_folder():
     """
     Get the folder path to translate.
@@ -24,7 +22,7 @@ def choose_folder():
         raise e
 
     if not folder:
-        raise FileNotFoundError("No folder selected.")
+        raise FileNotFoundError("Error: No folder selected.")
 
     try:
         folder = Path(folder).relative_to(Path().resolve())
@@ -64,10 +62,9 @@ def write_stage_page_head(folder_path: Path):
             file.write(stage_part_return(1))
 
     except Exception as e:
-        print(f"Error writing head for {folder_path.name}: {e}")
-        restore_temp_file(path_list)
-        print("Restored the backup file.")
-        sys.exit(1)
+        print(f"Error: When writing head for {folder_path.name}")
+        raise e
+        
 
 def readme_translate(readme_file: Path):
     """
@@ -86,7 +83,7 @@ def readme_translate(readme_file: Path):
     try:
         file = readme_file.read_text(encoding="utf-8").splitlines()
     except Exception as e:
-        print(f"Error reading file {readme_file.name}")
+        print(f"Error: When reading file {readme_file.name}")
         raise e
 
     for line in file:
@@ -106,9 +103,8 @@ def readme_translate(readme_file: Path):
                         {content}
                     </p>\n"""
         else:
-            print(f"Undefined line found [{line}] in {readme_file.stem}")
+            print(f"Error: Undefined line found [{line}] in {readme_file.stem}")
             
-
     return readme_part
 
 
@@ -123,7 +119,7 @@ def txt_to_stage_body_translate(folder_path: Path, file_path: Path,
     :return: None
     """
 
-    global p_number
+    p_number = 0
 
     p_regex = r"^/p\{(?P<default>[^}]*)\}\s*(?P<content>.*)$"  
     #match /p{default} content
@@ -146,7 +142,7 @@ def txt_to_stage_body_translate(folder_path: Path, file_path: Path,
     try:
         file = file_path.read_text(encoding="utf-8").splitlines()
     except Exception as e:
-        print(f"Error reading file {file_path.name}")
+        print(f"Error : When reading file {file_path.name}")
         raise e
     
     image_part = ""
@@ -215,10 +211,10 @@ def txt_to_stage_body_translate(folder_path: Path, file_path: Path,
                         </p>
                     </a>\n"""
         else:
-            print(f"Undefined line found [{line}] in {file_path.stem}")
+            print(f"Error : Undefined line found [{line}] in {file_path.stem}")
 
     if not image_part:
-        print(f"No cover image found in {file_path.stem}.")
+        print(f"Error : No cover image found in {file_path.stem}.")
 
     paragraph_start = """\
                 <div class="stagepageparagraph">
@@ -250,7 +246,7 @@ def txt_to_stage_body_translate(folder_path: Path, file_path: Path,
     
     return (image_part + paragraph_start + paragraph_default + paragraph_part + 
             paragraph_version + paragraph_end + download_start + download_part + 
-            download_end)
+            download_end), p_number
     
 
 def write_stage_page_body(folder_path: Path):
@@ -258,20 +254,20 @@ def write_stage_page_body(folder_path: Path):
     Write the body of the stage page HTML file.
 
     :param folder_path: the folder path
-    :return: None
+    :return: tuple (p_number, p_number_zh)
+        p_number: the additional p in .txt file
+        p_number_zh: the additional p in zh.txt file
     """
-
-    global p_number
 
     file_path = get_txt_file_path(folder_path)
 
-    body = txt_to_stage_body_translate(folder_path, file_path[0])
-    print(f"Number of additional paragraphs: {p_number} in {file_path[0].name}")
-
-    p_number = 0
-    body_zh = txt_to_stage_body_translate(folder_path, file_path[1], True)
-    print(f"Number of additional paragraphs: {p_number} in {file_path[1].name}")
-
+    body, p_number = txt_to_stage_body_translate(folder_path, 
+                                                 file_path[0])
+    
+    body_zh, p_number_zh = txt_to_stage_body_translate(folder_path, 
+                                                       file_path[1], 
+                                                       True)
+    
     path_list = get_html_file_path(folder_path)
     
     try:
@@ -281,10 +277,10 @@ def write_stage_page_body(folder_path: Path):
         with open(path_list[1], "a", encoding="utf-8") as file:
             file.write(body_zh)
     except Exception as e:
-        print(f"Error writing body for stage {folder_path.name}: {e}")
-        restore_temp_file(path_list)
-        print("Restored the backup file.")
-        sys.exit(1)
+        print(f"Error : When writing body for stage {folder_path.name}")
+        raise e
+
+    return p_number, p_number_zh
 
 
 def write_stage_page_tail(folder_path: Path):
@@ -304,11 +300,9 @@ def write_stage_page_tail(folder_path: Path):
         with open(path_list[1], "a", encoding="utf-8") as file:
             file.write(stage_part_return(2))
     except Exception as e:
-        print(f"Error writing tail for {folder_path.name}: {e}")
-        restore_temp_file(path_list)
-        print("Restored the backup file.")
-        sys.exit(1)
-
+        print(f"Error : When writing tail for {folder_path.name}")
+        raise e
+        
     
 def stage_part_return(part_number: int):
     """
@@ -396,13 +390,12 @@ def generate_stage_page():
     
     try:
         write_stage_page_head(folder_path)
-        write_stage_page_body(folder_path)
+        p_number, p_number_zh = write_stage_page_body(folder_path)
         write_stage_page_tail(folder_path)
         delete_temp_file(get_html_file_path(folder_path))
-        print("Translation completed successfully.\n")
 
-        from generate_stage_list import generate_stage_list
-        generate_stage_list() 
+        print(f"Translated blog page {folder_path.stem}: " +
+              f"added {p_number} paragraphs (en), {p_number_zh} paragraphs (zh)")
 
     except Exception as e:
         print(f"Error translating stage page in {folder_path.name}: {e}")
@@ -412,4 +405,5 @@ def generate_stage_page():
     
 
 if __name__ == "__main__":
+    Tk().withdraw()
     generate_stage_page()
