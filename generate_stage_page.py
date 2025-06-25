@@ -43,7 +43,7 @@ def get_default_readme_path():
     :return: the path of the default README file.
     """
 
-    return Path("./stages/README.txt")
+    return [Path("./stages/README.txt"), Path("./stages/README-zh.txt")]
 
 
 def write_stage_page_head(folder_path: Path):
@@ -73,15 +73,48 @@ def readme_translate(readme_file: Path):
     """
     Translate the README file to HTML part.
 
-    :param folder_path: the folder path
+    :param readme_file: the readme file path
     :return: the HTML part of the README file
     """
 
-    return ""
+    p_regex = r"^/p\{(?P<default>[^}]*)\}\s*(?P<content>.*)$"  
+    #match /p{default} content
+    p_re = re.compile(p_regex)
+
+    readme_part = ""
+
+    try:
+        file = readme_file.read_text(encoding="utf-8").splitlines()
+    except Exception as e:
+        print(f"Error reading file {readme_file.name}")
+        raise e
+
+    for line in file:
+
+        line = line.strip()
+
+        if not line:
+            continue
+
+        p_match = p_re.match(line)
+
+        if p_match:
+            content = p_match.group("content").strip()
+
+            readme_part += f"""\
+                    <p>
+                        {content}
+                    </p>\n"""
+        else:
+            print(f"Undefined line found [{line}] in {readme_file.stem}")
+            
+
+    return readme_part
 
 
 
-def txt_to_stage_body_translate(folder_path: Path, file_path: Path):
+def txt_to_stage_body_translate(folder_path: Path, file_path: Path, 
+                                zh: bool = False):
     """
     Translate the chosen file to HTML body.
 
@@ -92,7 +125,7 @@ def txt_to_stage_body_translate(folder_path: Path, file_path: Path):
 
     global p_number
 
-    p_regex = r"^/p\{(?P<default>[^}]+)\}\s*(?P<content>.*)$"  
+    p_regex = r"^/p\{(?P<default>[^}]*)\}\s*(?P<content>.*)$"  
     #match /p{default} content
     p_re = re.compile(p_regex)
 
@@ -113,7 +146,7 @@ def txt_to_stage_body_translate(folder_path: Path, file_path: Path):
     try:
         file = file_path.read_text(encoding="utf-8").splitlines()
     except Exception as e:
-        print(f"Error reading file {file_path.name}: {e}")
+        print(f"Error reading file {file_path.name}")
         raise e
     
     image_part = ""
@@ -159,7 +192,7 @@ def txt_to_stage_body_translate(folder_path: Path, file_path: Path):
             paragraph_part += f"""\
                     <p>
                         {content}
-                    <p>\n"""
+                    </p>\n"""
             
             p_number += 1
 
@@ -169,7 +202,7 @@ def txt_to_stage_body_translate(folder_path: Path, file_path: Path):
             paragraph_version = f"""\
                     <p>
                         {version}
-                    <p>\n"""
+                    </p>\n"""
 
         elif d_match:
             link = d_match.group("link").strip()
@@ -194,7 +227,10 @@ def txt_to_stage_body_translate(folder_path: Path, file_path: Path):
                     </p>\n"""
     
     if have_default:
-        paragraph_default = readme_translate(get_default_readme_path())
+        if zh:
+            paragraph_default = readme_translate(get_default_readme_path()[1])
+        else:
+            paragraph_default = readme_translate(get_default_readme_path()[0])
     else:
         paragraph_default = ""
     
@@ -212,7 +248,9 @@ def txt_to_stage_body_translate(folder_path: Path, file_path: Path):
     download_end = """\
                 </div>\n"""
     
-    return image_part + paragraph_start + paragraph_default + paragraph_part + paragraph_version + paragraph_end + download_start + download_part + download_end
+    return (image_part + paragraph_start + paragraph_default + paragraph_part + 
+            paragraph_version + paragraph_end + download_start + download_part + 
+            download_end)
     
 
 def write_stage_page_body(folder_path: Path):
@@ -231,7 +269,7 @@ def write_stage_page_body(folder_path: Path):
     print(f"Number of additional paragraphs: {p_number} in {file_path[0].name}")
 
     p_number = 0
-    body_zh = txt_to_stage_body_translate(folder_path, file_path[1])
+    body_zh = txt_to_stage_body_translate(folder_path, file_path[1], True)
     print(f"Number of additional paragraphs: {p_number} in {file_path[1].name}")
 
     path_list = get_html_file_path(folder_path)
