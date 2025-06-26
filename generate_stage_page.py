@@ -18,7 +18,7 @@ def choose_folder():
             initialdir="./stages"
         )
     except Exception as e:
-        print(f"Error : When selecting folder.")
+        print(f"Error: When selecting folder.")
         raise e
 
     if not folder:
@@ -116,7 +116,9 @@ def txt_to_stage_body_translate(folder_path: Path, file_path: Path,
 
     :param folder_path: the folder path
     :param file_path: the file path
-    :return: None
+    :return: tuple (body, p_number)
+        body: the HTML body part
+        p_number: the number of paragraphs in the file
     """
 
     p_number = 0
@@ -142,7 +144,7 @@ def txt_to_stage_body_translate(folder_path: Path, file_path: Path,
     try:
         file = file_path.read_text(encoding="utf-8").splitlines()
     except Exception as e:
-        print(f"Error : When reading file {file_path.name}.")
+        print(f"Error: When reading file {file_path.name}.")
         raise e
     
     image_part = ""
@@ -211,10 +213,10 @@ def txt_to_stage_body_translate(folder_path: Path, file_path: Path,
                         </p>
                     </a>\n"""
         else:
-            print(f"Error : Undefined line found {line} in {file_path.name}.")
+            print(f"Error: Undefined line found {line} in {file_path.name}.")
 
     if not image_part:
-        print(f"Error : No cover image found in {file_path.stem}.")
+        print(f"Error: No cover image found in {file_path.stem}.")
 
     paragraph_start = """\
                 <div class="stagepageparagraph">
@@ -277,7 +279,7 @@ def write_stage_page_body(folder_path: Path):
         with open(path_list[1], "a", encoding="utf-8") as file:
             file.write(body_zh)
     except Exception as e:
-        print(f"Error : When writing body for stage {folder_path.name}.")
+        print(f"Error: When writing body for stage {folder_path.name}.")
         raise e
 
     return p_number, p_number_zh
@@ -300,7 +302,7 @@ def write_stage_page_tail(folder_path: Path):
         with open(path_list[1], "a", encoding="utf-8") as file:
             file.write(stage_part_return(2))
     except Exception as e:
-        print(f"Error : When writing tail for {folder_path.name}.")
+        print(f"Error: When writing tail for {folder_path.name}.")
         raise e
         
     
@@ -308,7 +310,7 @@ def stage_part_return(part_number: int):
     """
     Return the head or tail of the stage page HTML.
 
-    :param part: 0 for head, 1 for head-zh, 2 for tail
+    :param part_number: 0 for head, 1 for head-zh, 2 for tail
     :return: str of head or tail
     """
 
@@ -363,7 +365,7 @@ def stage_part_return(part_number: int):
             
         </main>
 
-        <script src="script.js"></script>
+        <script src="/script.js"></script>
         
     </body>
 </html>"""
@@ -376,7 +378,7 @@ def stage_part_return(part_number: int):
         case 2:
             return tail
         case _:
-            raise ValueError("Error : Wrong part number.")
+            raise ValueError("Error: Wrong part number.")
 
 def generate_stage_page():
     """
@@ -394,12 +396,12 @@ def generate_stage_page():
         write_stage_page_tail(folder_path)
         delete_temp_file(get_html_file_path(folder_path))
 
-        print(f"Translated blog page {folder_path.stem}: " +
+        print(f"Translated stage page {folder_path.stem}: " +
               f"added {p_number} paragraphs (en), " +
               f"{p_number_zh} paragraphs (zh).")
 
     except Exception as e:
-        print(f"Error translating stage page in {folder_path.name}: {e}.")
+        print(f"Error: When translating stage page in {folder_path.name}: {e}.")
         restore_temp_file(get_html_file_path(folder_path))
         print("Restored the backup file.")
         sys.exit(1)

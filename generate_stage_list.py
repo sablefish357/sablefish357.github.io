@@ -38,7 +38,9 @@ def write_stage_list_head():
 def get_body_part_of_stage_list(folder_path: Path, is_first: bool = False):
     """
     Get the body part of the stage list.
-    
+
+    :param folder_path: the folder path of the stage
+    :param is_first: whether this is the first stage in the list
     :return: a list of string representing the body part of the stage list
     """
 
@@ -238,8 +240,8 @@ def stage_list_part_return(part_number: int):
             SableFiSh
         </title>
 
-        <link rel="icon" type="image/jpg" href="image/favicon.jpg">
-        <link rel="stylesheet" href="style.css">
+        <link rel="icon" type="image/jpg" href="/image/favicon.jpg">
+        <link rel="stylesheet" href="/style.css">
 
         <script src="/addelements.js" defer></script>
     </head> 
@@ -264,8 +266,8 @@ def stage_list_part_return(part_number: int):
             SableFiSh
         </title>
 
-        <link rel="icon" type="image/jpg" href="image/favicon.jpg">
-        <link rel="stylesheet" href="style.css">
+        <link rel="icon" type="image/jpg" href="/image/favicon.jpg">
+        <link rel="stylesheet" href="/style.css">
 
         <script src="/addelements_zh.js" defer></script>
     </head> 
@@ -281,7 +283,7 @@ def stage_list_part_return(part_number: int):
             
         </main>
 
-        <script src="script.js"></script>
+        <script src="/script.js"></script>
         
     </body>
 </html>"""
