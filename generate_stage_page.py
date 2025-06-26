@@ -3,7 +3,7 @@ import re
 from pathlib import Path
 from tkinter import Tk, filedialog
 from generator_help_functions import *
-sys.stdout.reconfigure(encoding='utf-8')
+sys.stdout.reconfigure(encoding='utf-8') # type: ignore
 
 def choose_folder():
     """
