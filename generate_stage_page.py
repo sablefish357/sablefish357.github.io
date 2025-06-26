@@ -197,9 +197,15 @@ def txt_to_stage_body_translate(folder_path: Path, file_path: Path,
         elif v_match:
             version = v_match.group("version").strip()
 
-            paragraph_version = f"""\
+            if zh:
+                paragraph_version = f"""\
                     <p>
-                        {version}
+                        配布blender版本{version}
+                    </p>\n"""
+            else:
+                paragraph_version = f"""\
+                    <p>
+                        Blender version {version}
                     </p>\n"""
 
         elif d_match:
@@ -231,17 +237,26 @@ def txt_to_stage_body_translate(folder_path: Path, file_path: Path,
             paragraph_default = readme_translate(get_default_readme_path()[0])
     else:
         paragraph_default = ""
-    
-    paragraph_end = """\
-                </div>\n"""
-    
-    download_start = """\
+
+    if zh:
+        download_start = """\
                 <div class="download">
                     <p>
                         下载链接:
                     </p>
                 </div>
                 <div class="downloadlink">\n\n"""
+    else:
+        download_start = """\
+                <div class="download">
+                    <p>
+                        Click to download:
+                    </p>
+                </div>
+                <div class="downloadlink">\n\n"""
+    
+    paragraph_end = """\
+                </div>\n"""
     
     download_end = """\
                 </div>\n"""
