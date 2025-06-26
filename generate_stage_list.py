@@ -32,14 +32,14 @@ def write_stage_list_head():
             file.write(stage_list_part_return(1))
 
     except Exception as e:
-        print(f"Error : When writing head for stage_list.")
+        print(f"Error: When writing head for stage_list.")
         raise e
 
 def get_body_part_of_stage_list(folder_path: Path, is_first: bool = False):
     """
     Get the body part of the stage list.
     
-    :return: a string representing the body part of the stage list
+    :return: a list of string representing the body part of the stage list
     """
 
     t_regex = r"^/t\{(?P<temp>[^}]*)\}\s*(?P<title>.*)$"  
@@ -66,7 +66,7 @@ def get_body_part_of_stage_list(folder_path: Path, is_first: bool = False):
         title = title_match.group("title")
         title_zh = title_match_zh.group("title")
     else:
-        raise ValueError("Error : Title not found in the txt file.")
+        raise ValueError("Error: Title not found in the txt file.")
     
     date = folder_path.name
 
@@ -81,10 +81,10 @@ def get_body_part_of_stage_list(folder_path: Path, is_first: bool = False):
         image_name_zh = image_match_zh.group("image_name")
         description_zh = image_match_zh.group("description")
     else:
-        raise ValueError("Error : Image not found in the txt file.")
+        raise ValueError("Error: Image not found in the txt file.")
 
     if is_first:
-        stage_list_class = "stagecontainer  firststagecontainer"
+        stage_list_class = "stagecontainer firststagecontainer"
     else:
         stage_list_class = "stagecontainer"
 
@@ -92,7 +92,7 @@ def get_body_part_of_stage_list(folder_path: Path, is_first: bool = False):
                 <div class="{stage_list_class}">
                     <div class="stageimagecontainer">
                         <a href="/stages/{date}/{date}.html">
-                            <img src="stages/{date}/{image_name}" alt="{description}" class="stageimage">
+                            <img src="/stages/{date}/{image_name}" alt="{description}" class="stageimage">
                         </a>
                     </div>
                     <div class="stageparagraph">
@@ -113,7 +113,7 @@ def get_body_part_of_stage_list(folder_path: Path, is_first: bool = False):
                 <div class="{stage_list_class}">
                     <div class="stageimagecontainer">
                         <a href="/stages/{date}/{date}-zh.html">
-                            <img src="stages/{date}/{image_name_zh}" alt="{description_zh}" class="stageimage">
+                            <img src="/stages/{date}/{image_name_zh}" alt="{description_zh}" class="stageimage">
                         </a>
                     </div>
                     <div class="stageparagraph">
@@ -155,7 +155,7 @@ def get_all_stage_folders():
             m, d, y = map(int, folder.name.split('-'))
             return (y, m, d)
         except Exception as e:
-            print(f"Error : When parsing date from folder {folder.name}.")
+            print(f"Error: When parsing date from folder {folder.name}.")
             return (9999, 99, 99)
         
     folder_list.sort(key=folder_date_key)
@@ -191,7 +191,7 @@ def write_stage_list_body():
             l_number += 1
 
         except Exception as e:
-            print(f"Error : When writing body for stage_list {folder.name}.")
+            print(f"Error: When writing body for stage_list {folder.name}.")
             raise e
 
     return l_number
@@ -213,7 +213,7 @@ def write_stage_list_tail():
         with open(path_list[1], "a", encoding="utf-8") as file:
             file.write(stage_list_part_return(2))
     except Exception as e:
-        print(f"Error : When writing tail for stage_list.")
+        print(f"Error: When writing tail for stage_list.")
         raise e
 
 
@@ -221,7 +221,7 @@ def stage_list_part_return(part_number: int):
     """
     Return the head or tail of the stage list HTML.
 
-    :param part: 0 for head, 1 for head-zh, 2 for tail
+    :param part_number: 0 for head, 1 for head-zh, 2 for tail
     :return: str of head or tail
     """
 
@@ -295,7 +295,7 @@ def stage_list_part_return(part_number: int):
         case 2:
             return tail
         case _:
-            raise ValueError("Error : Wrong part number.")
+            raise ValueError("Error: Wrong part number.")
 
 
 def generate_stage_list():
@@ -314,7 +314,7 @@ def generate_stage_list():
         delete_temp_file(get_stage_list_path())
         print(f"Added {l_number} stages to the stage list")
     except Exception as e:
-        print(f"Error : When generating stage list: {e}.")
+        print(f"Error: When generating stage list: {e}.")
         restore_temp_file(get_stage_list_path())
         print("Restored the backup file.")
         sys.exit(1)
