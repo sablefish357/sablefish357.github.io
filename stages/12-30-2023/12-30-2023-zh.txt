@@ -1,0 +1,6 @@
+/t{} Street-ver.-Night
+/i{streetnight v1.jpg, 90} 一张夜晚街道的照片
+/p{default} 场景有一个片头, 请用自己的图标代替。
+/p{} 落叶的粒子系统需要先缓存。
+/v{} 4.3.2
+/d{https://github.com/sablefish357/Street-ver.-Night-12302023} GitHub
