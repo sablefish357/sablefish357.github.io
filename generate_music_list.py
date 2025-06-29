@@ -154,7 +154,24 @@ def get_all_music_files():
         if thing.is_file() and thing.suffix.lower() in {".mp3"}:
             music_files.append(thing)
 
-    music_files.sort(key=lambda f: f.stat().st_ctime)
+    def get_track_number(music_file: Path):
+        """
+        Extract track number from the file name.
+        
+        :param music_file: the music file path
+        :return: the track number as an integer, or infinity if not found
+        """
+
+        try:
+            audio_file = eyed3.load(music_file)
+            if audio_file and audio_file.tag and audio_file.tag.track_num:
+                return audio_file.tag.track_num[0]
+            else:
+                return float('inf')
+        except Exception as e:
+            return float('inf')
+
+    music_files.sort(key=get_track_number)
     return music_files
 
 
