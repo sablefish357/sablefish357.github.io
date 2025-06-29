@@ -3,10 +3,7 @@ import re
 from tkinter import Tk, filedialog
 from pathlib import Path
 from generator_help_functions import *
-sys.stdout.reconfigure(encoding='utf-8')
-
-p_number = 0
-i_number = 0
+sys.stdout.reconfigure(encoding='utf-8') # type: ignore
 
 def choose_folder():
     """
@@ -21,25 +18,25 @@ def choose_folder():
             initialdir="./blogs"
         )
     except Exception as e:
-        print(f"Error selecting folder: {e}")
+        print(f"Error: When selecting folder.")
         raise e
 
     if not folder:
-        raise FileNotFoundError("No folder selected.")
+        raise FileNotFoundError("Error: No folder selected.")
 
     try:
         folder = Path(folder).relative_to(Path().resolve())
 
     except Exception as e:
-        print(f"Error: The selected folder is not within the project root: {e}")
+        print(f"Error: The selected folder is not within the project root.")
         raise e
     
     return folder
 
 
-def write_html_head(folder_path: Path):
+def write_blog_page_head(folder_path: Path):
     """
-    Write both head of the html file
+    Write the head of the blog page.
 
     :param folder_path: the folder path
     :return: None
@@ -52,30 +49,32 @@ def write_html_head(folder_path: Path):
         with open(path_list[1], "w", encoding="utf-8") as file:
             file.write(blog_part_return(1))
     except Exception as e:
-        print(f"Error writing head for {folder_path.name}: {e}")
-        restore_temp_file(path_list)
-        print("Restored the backup file.")
-        sys.exit(1)
+        print(f"Error: When writing head for {folder_path.name}.")
+        raise e
 
 
 def txt_to_body_translate(folder_path: Path, file_path: Path):
     """
-    Translate the choose file to html body
+    Translate the chosen file to HTML body.
 
     :param folder_path: the folder path
     :param file_path: the txt file path
-    :return: html body
+    :return: tuple (body, p_number, i_number)
+        body: the HTML body as a string
+        p_number: the number of paragraphs
+        i_number: the number of images
     """
 
-    global p_number, i_number
+    i_number = 0
+    p_number = 0
 
     p_regex = r"^/p\{(?P<p_position>[^}]+)\}\s*(?P<content>.*)$"  
     #match /p{p_position} content
 
     p_re = re.compile(p_regex)
 
-    i_regex = (r"^/i\{(?P<image_name>[^,}]+)\s*,"
-               r"\s*(?P<image_size>[^,}]+)\s*\}"
+    i_regex = (r"^/i\{(?P<image_name>[^,}]*)\s*,"
+               r"\s*(?P<image_size>[^,}]*)\s*\}"
                r"\s*(?P<description>.*)$")  
     # match /i{image_name, image_size} description
 
@@ -84,7 +83,7 @@ def txt_to_body_translate(folder_path: Path, file_path: Path):
     try:
         file = file_path.read_text(encoding="utf-8").splitlines()
     except Exception as e:
-        print(f"Error reading file {file_path.name}: {e}")
+        print(f"Error: When reading file {file_path.name}.")
         raise e
     
     body = ""
@@ -153,30 +152,28 @@ def txt_to_body_translate(folder_path: Path, file_path: Path):
                     </p>
                 </div>\n\n"""
 
-    return body
+    return body, p_number, i_number
 
 
-def write_html_body(folder_path: Path):
+def write_blog_page_body(folder_path: Path):
     """
-    Write html body
+    Write the body of the blog page.
 
     :param folder_path: the folder path
-    :return: None
+    :return: tuple (p_number, i_number, p_number_zh, i_number_zh)
+        p_number: the number of paragraphs in English version
+        i_number: the number of images in English version
+        p_number_zh: the number of paragraphs in Chinese version
+        i_number_zh: the number of images in Chinese version
     """
-
-    global p_number, i_number
 
     file_path = get_txt_file_path(folder_path)
 
-    body = txt_to_body_translate(folder_path, file_path[0])
-    print(f"Number of paragraphs: {p_number}  " +
-          f"Number of images: {i_number}  in {file_path[0].name}")
+    body, p_number, i_number = txt_to_body_translate(folder_path, 
+                                                     file_path[0])
 
-    p_number = 0
-    i_number = 0
-    body_zh = txt_to_body_translate(folder_path, file_path[1])
-    print(f"Number of paragraphs: {p_number}  " +
-          f"Number of images: {i_number}  in {file_path[1].name}")
+    body_zh, p_number_zh, i_number_zh = txt_to_body_translate(folder_path, 
+                                                              file_path[1])
 
     path_list = get_html_file_path(folder_path)
 
@@ -187,15 +184,15 @@ def write_html_body(folder_path: Path):
         with open(path_list[1], "a", encoding="utf-8") as file:
             file.write(body_zh)
     except Exception as e:
-        print(f"Error writing body for {folder_path.name}: {e}")
-        restore_temp_file(path_list)
-        print("Restored the backup file.")
-        sys.exit(1)
+        print(f"Error: When writing body for {folder_path.name}.")
+        raise e
+    
+    return p_number, i_number, p_number_zh, i_number_zh
 
 
-def write_html_tail(folder_path: Path):
+def write_blog_page_tail(folder_path: Path):
     """
-    Write html tail
+    Write the tail of the blog page.
 
     :param folder_path: the folder path
     :return: None
@@ -210,15 +207,13 @@ def write_html_tail(folder_path: Path):
         with open(path_list[1], "a", encoding="utf-8") as file:
             file.write(blog_part_return(2))
     except Exception as e:
-        print(f"Error writing tail for {folder_path.name}: {e}")
-        restore_temp_file(path_list)
-        print("Restored the backup file.")
-        sys.exit(1)
+        print(f"Error: When writing tail for {folder_path.name}.")
+        raise e
 
 
 def blog_part_return(part_number: int):
     """
-    Return head or tail of the blog html
+    Return head or tail of the blog HTML.
 
     :param part_number: 0 for head, 1 for head-zh, 2 for tail
     :return: str of head or tail
@@ -275,7 +270,7 @@ def blog_part_return(part_number: int):
             
         </main>
 
-        <script src="script.js"></script>
+        <script src="/script.js"></script>
         
     </body>
 </html>"""
@@ -288,12 +283,12 @@ def blog_part_return(part_number: int):
         case 2:
             return tail
         case _:
-            raise ValueError("Wrong part number.")
+            raise ValueError("Error: Wrong part number.")
 
 
-def translate_blog():
+def generate_blog_page():
     """
-    Translate the choose folder to html blog
+    Generate the blog page.
 
     :return: None
     """
@@ -302,17 +297,18 @@ def translate_blog():
     save_temp_file(get_html_file_path(folder_path))
     
     try:
-        write_html_head(folder_path)
-        write_html_body(folder_path)
-        write_html_tail(folder_path)
+        write_blog_page_head(folder_path)
+        (p_number, i_number, 
+         p_number_zh, i_number_zh) = write_blog_page_body(folder_path)
+        write_blog_page_tail(folder_path)
         delete_temp_file(get_html_file_path(folder_path))
-        print("Translation completed successfully.\n")
 
-        from generate_blog_list import generate_blog_list
-        generate_blog_list() 
+        print(f"Translated blog page {folder_path.stem}: " +
+              f"added {p_number} paragraphs {i_number} images (en), " +
+              f"{p_number_zh} paragraphs {i_number_zh} images (zh).")
 
     except Exception as e:
-        print(f"Error translating blog in {folder_path.name}: {e}")
+        print(f"Error: When translating blog in {folder_path.name}: {e}.")
         restore_temp_file(get_html_file_path(folder_path))
         print("Restored the backup file.")
         sys.exit(1)
@@ -320,4 +316,4 @@ def translate_blog():
 
 if __name__ == "__main__":
     Tk().withdraw()
-    translate_blog()
+    generate_blog_page()

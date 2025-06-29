@@ -265,8 +265,8 @@ def music_list_part_return(part_number: int):
             SableFiSh
         </title>
 
-        <link rel="icon" type="image/jpg" href="image/favicon.jpg">
-        <link rel="stylesheet" href="style.css">
+        <link rel="icon" type="image/jpg" href="/image/favicon.jpg">
+        <link rel="stylesheet" href="/style.css">
 
         <script src="/addelements.js" defer></script>
     </head> 
@@ -289,8 +289,8 @@ def music_list_part_return(part_number: int):
             SableFiSh
         </title>
 
-        <link rel="icon" type="image/jpg" href="image/favicon.jpg">
-        <link rel="stylesheet" href="style.css">
+        <link rel="icon" type="image/jpg" href="/image/favicon.jpg">
+        <link rel="stylesheet" href="/style.css">
 
         <script src="/addelements_zh.js" defer></script>
     </head> 
@@ -306,7 +306,7 @@ def music_list_part_return(part_number: int):
 
         </main>
 
-        <script src="script.js"></script>
+        <script src="/script.js"></script>
         
     </body>
 </html>"""
