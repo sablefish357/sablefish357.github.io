@@ -4,7 +4,7 @@ import eyed3
 import logging
 import re
 from generator_help_functions import *
-sys.stdout.reconfigure(encoding='utf-8')
+sys.stdout.reconfigure(encoding='utf-8') # type: ignore
 
 logging.getLogger("eyed3").setLevel(logging.ERROR)
 
@@ -45,10 +45,8 @@ def write_music_list_head():
             file.write(music_list_part_return(1))
 
     except Exception as e:
-        print(f"Error writing head for music_list: {e}")
-        restore_temp_file(path_list)
-        print("Restored the backup file.")
-        sys.exit(1)
+        print(f"Error: When writing head for music_list.")
+        raise e
 
 
 def generate_music_picture(music_path: Path):
@@ -69,10 +67,10 @@ def generate_music_picture(music_path: Path):
     try:
         audio_file = eyed3.load(music_path)
         if ((audio_file is None) or (audio_file.tag is None) or 
-            (not audio_file.tag.images)):
+            (not audio_file.tag.images)): # type: ignore
             return None
         
-        image_data = audio_file.tag.images[0].image_data
+        image_data = audio_file.tag.images[0].image_data # type: ignore
         with open(cover_file, "wb") as img_file:
             img_file.write(image_data)
 
@@ -156,7 +154,24 @@ def get_all_music_files():
         if thing.is_file() and thing.suffix.lower() in {".mp3"}:
             music_files.append(thing)
 
-    music_files.sort(key=lambda f: f.stat().st_ctime)
+    def get_track_number(music_file: Path):
+        """
+        Extract track number from the file name.
+        
+        :param music_file: the music file path
+        :return: the track number as an integer, or infinity if not found
+        """
+
+        try:
+            audio_file = eyed3.load(music_file)
+            if audio_file and audio_file.tag and audio_file.tag.track_num:
+                return audio_file.tag.track_num[0]
+            else:
+                return float('inf')
+        except Exception as e:
+            return float('inf')
+
+    music_files.sort(key=get_track_number)
     return music_files
 
 
@@ -164,21 +179,23 @@ def write_music_list_body():
     """
     Write music list body
     
-    :return: None
+    :return: the number of music files added to the list
     """
+
+    s_number = 0
 
     path_list = get_music_list_path()
     music_files = get_all_music_files()
 
     if not music_files:
-        print("No music files found in the music folder.")
-        return
+        print("Error: No music files found in the music folder.")
+        return 0
     
     for i, music in enumerate(music_files):
         music_cover = generate_music_picture(music)
 
         if music_cover is None:
-            print(f"Skipping {music.name} due to missing cover.")
+            print(f"Error: Skipping {music.name} due to missing cover.")
             continue
 
         if i == 0:
@@ -188,7 +205,7 @@ def write_music_list_body():
             body_part = get_body_part_of_music_list(music, music_cover)
 
         if body_part is None:
-            print(f"Skipping {music.name} due to missing metadata.")
+            print(f"Error: Skipping {music.name} due to missing metadata.")
             continue
 
         try:
@@ -198,13 +215,13 @@ def write_music_list_body():
             with open(path_list[1], "a", encoding="utf-8") as file:
                 file.write(body_part)
 
-            print(f"Added music {music.stem} to the list.")
+            s_number += 1
 
         except Exception as e:
-            print(f"Error writing body for music {music.name}: {e}")
-            restore_temp_file(path_list)
-            print("Restored the backup file.")
-            sys.exit(1)
+            print(f"Error: When writing body for music {music.name}.")
+            raise e
+        
+    return s_number
 
 
 def write_music_list_tail():
@@ -223,10 +240,8 @@ def write_music_list_tail():
             file.write(music_list_part_return(2))
 
     except Exception as e:
-        print(f"Error writing tail for music_list: {e}")
-        restore_temp_file(path_list)
-        print("Restored the backup file.")
-        sys.exit(1)
+        print(f"Error: When writing tail for music_list.")
+        raise e
 
 
 def music_list_part_return(part_number: int):
@@ -250,8 +265,8 @@ def music_list_part_return(part_number: int):
             SableFiSh
         </title>
 
-        <link rel="icon" type="image/jpg" href="image/favicon.jpg">
-        <link rel="stylesheet" href="style.css">
+        <link rel="icon" type="image/jpg" href="/image/favicon.jpg">
+        <link rel="stylesheet" href="/style.css">
 
         <script src="/addelements.js" defer></script>
     </head> 
@@ -274,15 +289,14 @@ def music_list_part_return(part_number: int):
             SableFiSh
         </title>
 
-        <link rel="icon" type="image/jpg" href="image/favicon.jpg">
-        <link rel="stylesheet" href="style.css">
+        <link rel="icon" type="image/jpg" href="/image/favicon.jpg">
+        <link rel="stylesheet" href="/style.css">
 
         <script src="/addelements_zh.js" defer></script>
     </head> 
 
     <body>
         <main>
-        
             <div class="musiclist">
                 <!-- MUSIC LIST STARTS HERE-->\n\n"""
 
@@ -291,7 +305,7 @@ def music_list_part_return(part_number: int):
 
         </main>
 
-        <script src="script.js"></script>
+        <script src="/script.js"></script>
         
     </body>
 </html>"""
@@ -304,7 +318,7 @@ def music_list_part_return(part_number: int):
         case 2:
             return tail
         case _:
-            raise ValueError("Wrong part number.")
+            raise ValueError("Error: Wrong part number.")
 
 
 def generate_music_list():
@@ -317,12 +331,12 @@ def generate_music_list():
 
     try:
         write_music_list_head()
-        write_music_list_body()
+        s_number = write_music_list_body()
         write_music_list_tail()
         delete_temp_file(get_music_list_path())
-        print("Music list generated successfully.")
+        print(f"Added {s_number} music(s) to the music list.")
     except Exception as e:
-        print(f"Error generating music list: {e}")
+        print(f"Error: When generating music list: {e}")
         restore_temp_file(get_music_list_path())
         print("Restored the backup file.")
         sys.exit(1)

@@ -314,7 +314,7 @@ def generate_stage_list():
         l_number = write_stage_list_body()
         write_stage_list_tail()
         delete_temp_file(get_stage_list_path())
-        print(f"Added {l_number} stages to the stage list")
+        print(f"Added {l_number} stage(s) to the stage list")
     except Exception as e:
         print(f"Error: When generating stage list: {e}.")
         restore_temp_file(get_stage_list_path())

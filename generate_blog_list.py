@@ -2,12 +2,12 @@ import re
 import sys
 from pathlib import Path
 from generator_help_functions import *
-sys.stdout.reconfigure(encoding='utf-8')
+sys.stdout.reconfigure(encoding='utf-8') # type: ignore
 
 
 def get_blog_list_path():
     """
-    Get the blog list path
+    Get the blog list path.
 
     :return: a list of blog list path
     """
@@ -17,7 +17,7 @@ def get_blog_list_path():
 
 def write_blog_list_head():
     """
-    Write blog head
+    Write the head of the blog list.
 
     :return: None
     """
@@ -32,15 +32,13 @@ def write_blog_list_head():
             file.write(blog_list_part_return(1))
 
     except Exception as e:
-        print(f"Error writing head for blog_list: {e}")
-        restore_temp_file(path_list)
-        print("Restored the backup file.")
-        sys.exit(1)
+        print(f"Error: When writing head for blog list.")
+        raise e
 
 
 def get_all_blog_folders():
     """
-    Get all blog folders
+    Get all blog folders.
 
     :return: a list of blog folder paths in date order
     """
@@ -60,7 +58,7 @@ def get_all_blog_folders():
             m, d, y = map(int, folder.name.split('-'))
             return (y, m, d)
         except Exception as e:
-            print(f"Error parsing date from folder name '{folder.name}': {e}")
+            print(f"Error: When parsing date from folder name {folder.name}.")
             return (9999, 99, 99)
         
     folder_list.sort(key=folder_date_key)
@@ -70,9 +68,10 @@ def get_all_blog_folders():
 
 def get_body_part_of_blog_list(folder_path: Path, is_first: bool = False):
     """
-    Get the body part of the blog list
+    Get the body part of the blog list.
     
     :param folder_path: the folder path
+    :param is_first: whether this is the first blog in the list
     :return: a list of en and zh string of the body part
     """
 
@@ -81,9 +80,9 @@ def get_body_part_of_blog_list(folder_path: Path, is_first: bool = False):
 
     t_re = re.compile(t_regex)
 
-    i_regex = (r"^/i\{(?P<image_name>[^,}]+)\s*,"
-               r"\s*(?P<image_size>[^,}]+)\s*\}"
-               r"\s*(?P<description>.*)$")  
+    i_regex = (r"^/i\{(?P<image_name>[^,}]*)\s*,"
+               r"\s*(?P<image_size>[^,}]*)\s*\}"
+               r"\s*(?P<description>.*)$")
     # match /i{image_name, image_size} description
 
     i_re = re.compile(i_regex)
@@ -100,8 +99,8 @@ def get_body_part_of_blog_list(folder_path: Path, is_first: bool = False):
         title = title_match.group("title")
         title_zh = title_match_zh.group("title")
     else:
-        raise ValueError("Title not found in the txt file.")
-    
+        raise ValueError("Error: Title not found in the txt file.")
+
     date = folder_path.name
 
     slash_date = date.replace("-", "/")
@@ -115,7 +114,7 @@ def get_body_part_of_blog_list(folder_path: Path, is_first: bool = False):
         image_name_zh = image_match_zh.group("image_name")
         description_zh = image_match_zh.group("description")
     else:
-        raise ValueError("Image not found in the txt file.")
+        raise ValueError("Error: Image not found in the txt file.")
 
     if is_first:
         blog_list_class = "blogcontainer firstblogcontainer"
@@ -169,10 +168,12 @@ def get_body_part_of_blog_list(folder_path: Path, is_first: bool = False):
 
 def write_blog_list_body():
     """
-    Write blog body
+    Write the body of the blog list.
     
-    :return: None
+    :return b_number: the number of blogs written
     """
+
+    b_number = 0
 
     path_list = get_blog_list_path()
 
@@ -190,18 +191,18 @@ def write_blog_list_body():
             with open(path_list[1], "a", encoding="utf-8") as file:
                 file.write(body_part[1])
 
-            print(f"Added blog list for {folder.name} to blog_list.")
-        except Exception as e:
-            print(f"Error writing body for blog_list {folder.name}: {e}")
-            restore_temp_file(path_list)
-            print("Restored the backup file.")
-            sys.exit(1)
-    
+            b_number += 1
 
+        except Exception as e:
+            print(f"Error: When writing body for blog list {folder.name}.")
+            raise e
+        
+    return b_number
+    
 
 def write_blog_list_tail():
     """
-    Write blog tail
+    Write the tail of the blog list.
 
     :return: None
     """
@@ -215,15 +216,13 @@ def write_blog_list_tail():
         with open(path_list[1], "a", encoding="utf-8") as file:
             file.write(blog_list_part_return(2))
     except Exception as e:
-        print(f"Error writing tail for blog_list: {e}")
-        restore_temp_file(path_list)
-        print("Restored the backup file.")
-        sys.exit(1)
+        print(f"Error: When writing tail for blog list.")
+        raise e
 
 
 def blog_list_part_return(part_number: int):
     """
-    Return head or tail of the blog list html
+    Return head or tail of the blog list HTML.
 
     :param part_number: 0 for head, 1 for head-zh, 2 for tail
     :return: str of head or tail
@@ -242,8 +241,8 @@ def blog_list_part_return(part_number: int):
             SableFiSh
         </title>
 
-        <link rel="icon" type="image/jpg" href="image/favicon.jpg">
-        <link rel="stylesheet" href="style.css">
+        <link rel="icon" type="image/jpg" href="/image/favicon.jpg">
+        <link rel="stylesheet" href="/style.css">
 
         <script src="/addelements.js" defer></script>
     </head> 
@@ -266,8 +265,8 @@ def blog_list_part_return(part_number: int):
             SableFiSh
         </title>
 
-        <link rel="icon" type="image/jpg" href="image/favicon.jpg">
-        <link rel="stylesheet" href="style.css">
+        <link rel="icon" type="image/jpg" href="/image/favicon.jpg">
+        <link rel="stylesheet" href="/style.css">
 
         <script src="/addelements_zh.js" defer></script>
     </head> 
@@ -283,8 +282,8 @@ def blog_list_part_return(part_number: int):
             
         </main>
 
-        <script src="script.js"></script>
-        
+        <script src="/script.js"></script>
+
     </body>
 </html>"""
 
@@ -296,12 +295,12 @@ def blog_list_part_return(part_number: int):
         case 2:
             return tail
         case _:
-            raise ValueError("Wrong part number.")
+            raise ValueError("Error: Wrong part number.")
         
 
 def generate_blog_list():
     """
-    Generate both blog and blog_zh files
+    Generate the blog list HTML files.
     
     :return: None
     """
@@ -310,12 +309,13 @@ def generate_blog_list():
 
     try:
         write_blog_list_head()
-        write_blog_list_body()
+        b_number = write_blog_list_body()
         write_blog_list_tail()
         delete_temp_file(get_blog_list_path())
-        print("Blog list generated successfully.")
+        print(f"Added {b_number} blog(s) to the blog list.")
+
     except Exception as e:
-        print(f"Error generating blog list: {e}")
+        print(f"Error: When generating blog list: {e}")
         restore_temp_file(get_blog_list_path())
         print("Restored the backup file.")
         sys.exit(1)

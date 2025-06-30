@@ -9,13 +9,13 @@ def save_temp_file(file_path: list[Path]):
     :return: None
     """
 
-    for file_path in file_path:
-        if file_path.exists():
+    for file in file_path:
+        if file.exists():
             try:
-                backup_path = file_path.with_suffix('.bak')
-                file_path.rename(backup_path)
+                backup_path = file.with_suffix('.bak')
+                file.rename(backup_path)
             except Exception as e:
-                print(f"Error creating backup for {file_path.name}: {e}")
+                print(f"Error: When creating backup for {file.name}: {e}")
                 raise e
             
 
@@ -24,18 +24,18 @@ def restore_temp_file(file_path: list[Path]):
     Delete created html file if exists and restore the backup file from .bak 
     file
 
-    :param folder_path: the folder path
+    :param file_path: a list of file path
     :return: None
     """
 
-    for file_path in file_path:
-        backup_path = file_path.with_suffix('.bak')
+    for file in file_path:
+        backup_path = file.with_suffix('.bak')
         if backup_path.exists():
             try:
-                file_path.unlink(missing_ok=True)
-                backup_path.rename(file_path)
+                file.unlink(missing_ok=True)
+                backup_path.rename(file)
             except Exception as e:
-                print(f"Error restoring {file_path.name} from backup: {e}")
+                print(f"Error: When restoring {file.name} from backup: {e}")
                 raise e
             
             
@@ -47,13 +47,13 @@ def delete_temp_file(file_path: list[Path]):
     :return: None
     """
 
-    for file_path in file_path:
-        backup_path = file_path.with_suffix('.bak')
+    for file in file_path:
+        backup_path = file.with_suffix('.bak')
         if backup_path.exists():
             try:
                 backup_path.unlink(missing_ok=True)
             except Exception as e:
-                print(f"Error deleting backup {backup_path.name}: {e}")
+                print(f"Error: When deleting backup {backup_path.name}: {e}")
                 raise e
 
 
@@ -94,4 +94,5 @@ def get_txt_file_path(folder_path: Path):
 
 
 if __name__ == "__main__":
-    print("This module is not meant to be run directly. It contains helper" +  "functions for generating music and blog pages and lists.")
+    print("This module is not meant to be run directly. It contains helper " +  
+          "functions for generating music and blog pages and lists.")
