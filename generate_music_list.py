@@ -189,7 +189,7 @@ def write_music_list_body():
 
     if not music_files:
         print("Error: No music files found in the music folder.")
-        return
+        return 0
     
     for i, music in enumerate(music_files):
         music_cover = generate_music_picture(music)
@@ -297,7 +297,6 @@ def music_list_part_return(part_number: int):
 
     <body>
         <main>
-        
             <div class="musiclist">
                 <!-- MUSIC LIST STARTS HERE-->\n\n"""
 

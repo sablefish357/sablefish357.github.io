@@ -240,7 +240,7 @@ def blog_part_return(part_number: int):
      
     <body>
         <main>
-            <div class="blogpagemain">\n"""
+            <div class="blogpagemain">\n\n"""
 
     head_zh = """\
 <!DOCTYPE html>
@@ -263,7 +263,7 @@ def blog_part_return(part_number: int):
      
     <body>
         <main>
-            <div class="blogpagemain">\n"""
+            <div class="blogpagemain">\n\n"""
 
     tail = """\
             </div>
