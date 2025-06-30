@@ -300,7 +300,7 @@ def blog_list_part_return(part_number: int):
 
 def generate_blog_list():
     """
-    Generate both blog and blog_zh files
+    Generate the blog list HTML files.
     
     :return: None
     """
