@@ -1,0 +1,5 @@
+/t{} MoonBase
+/i{MoonBase.jpg, 90} A photo from the moon base.
+/p{default} Earth asset from @samk9632
+/v{} 4.4.0
+/d{https://github.com/sablefish357/MoonBase-05042024} GitHub
