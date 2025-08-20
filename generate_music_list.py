@@ -90,17 +90,21 @@ def get_body_part_of_music_list(music_path: Path, music_cover: Path,
     :return: a string of the body part or None if metadata is missing
     """
 
-    m_regex = r"^(?P<artist>[^-]+)\s*-\s*(?P<title>.+)$"
-    # match "artist - title"
-
-    m_re = re.compile(m_regex)
-
-    m_match = m_re.match(music_path.stem)
-
-    if m_match:
-        artist = m_match.group("artist").strip()
-        title = m_match.group("title").strip()
-    else:
+    try:
+        audio_file = eyed3.load(music_path)
+        if ((audio_file is None) or (audio_file.tag is None)):
+            return None
+        
+        artist = audio_file.tag.artist
+        title = audio_file.tag.title
+        
+        if not artist or not title:
+            return None
+            
+        artist = artist.strip()
+        title = title.strip()
+        
+    except Exception as e:
         return None
     
     if is_first:
