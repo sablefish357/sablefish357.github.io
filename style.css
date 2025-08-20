@@ -109,6 +109,8 @@ header{
     overflow: hidden;
 
     pointer-events: none;
+
+    z-index: 1000;
 }
 
 .SableFiSh{
