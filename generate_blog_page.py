@@ -1,38 +1,8 @@
 import sys
 import re
-from tkinter import Tk, filedialog
 from pathlib import Path
 from generator_help_functions import *
 sys.stdout.reconfigure(encoding='utf-8') # type: ignore
-
-def choose_folder():
-    """
-    Get the folder path to translate.
-
-    :return: the path of the folder.
-    """
-
-    try:
-        folder = filedialog.askdirectory(
-            title="Please choose the blog file path",
-            initialdir="./blogs"
-        )
-    except Exception as e:
-        print(f"Error: When selecting folder.")
-        raise e
-
-    if not folder:
-        raise FileNotFoundError("Error: No folder selected.")
-
-    try:
-        folder = Path(folder).relative_to(Path().resolve())
-
-    except Exception as e:
-        print(f"Error: The selected folder is not within the project root.")
-        raise e
-    
-    return folder
-
 
 def write_blog_page_head(folder_path: Path):
     """
@@ -285,15 +255,14 @@ def blog_part_return(part_number: int):
         case _:
             raise ValueError("Error: Wrong part number.")
 
-
-def generate_blog_page():
+def generate_blog_page(folder_path: Path):
     """
     Generate the blog page.
 
+    :param folder_path: the folder path
     :return: None
     """
-    
-    folder_path = choose_folder()
+
     save_temp_file(get_html_file_path(folder_path))
     
     try:
@@ -313,7 +282,19 @@ def generate_blog_page():
         print("Restored the backup file.")
         sys.exit(1)
 
+def generate_all_blog_pages():
+    """
+    Generate all blog pages in the blogs folder.
+
+    :return: None
+    """
+    blogs_path = Path("./blogs")
+
+    for folder_path in blogs_path.iterdir():
+        if folder_path.is_dir():
+            if folder_path.name != "example":
+                generate_blog_page(folder_path)
+
 
 if __name__ == "__main__":
-    Tk().withdraw()
-    generate_blog_page()
+    generate_all_blog_pages()
