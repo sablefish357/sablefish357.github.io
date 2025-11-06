@@ -204,7 +204,7 @@ main{
 }
 
 .dark-image{
-    background-color: black;
+    background-color: #111111;
 }
 
 .paragraph{
@@ -213,7 +213,7 @@ main{
 }
 
 .dark-p{
-    background-color: black;
+    background-color: #111111;
     color: white;
 }
 
@@ -227,6 +227,16 @@ main{
     padding: 5% 10%;
     font-size: 2em;
     line-height: 1em;
+}
+
+.credits p{
+    font-weight: 300;
+    font-variation-settings: "wght" 300;
+    text-align: left;
+    padding: 0% 5% 5% 5%;
+    font-size: 1em;
+    line-height: 1em;
+    color: #777777;
 }
 
 .youtube_video{
