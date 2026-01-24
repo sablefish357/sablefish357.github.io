@@ -92,6 +92,61 @@ def get_txt_file_path(folder_path: Path):
 
     return [file_path, file_path_zh]
 
+def general_part_return(part_number: int, folder_Path: Path, page_title: str, class_name: str):
+    """
+    Return head or tail of the general HTML.
+
+    :param part_number: 0 for head, 1 for head-zh, 2 for tail, 3 for tail-zh
+    :param folder_Path: the folder path
+    :param page_title: the title of the page
+    :param class_name: the class name for CSS
+    :return: str of head or tail
+    """
+
+    is_en = part_number in [0, 2]
+
+    context = {
+        "lang" : "en" if is_en else "zh-CN"
+    }
+
+    head = f"""\
+<!DOCTYPE html>
+<html lang="{context['lang']}">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="This is SableFiSh's personal page.">
+        <meta name="keywords" content="Blender,SableFiSh,MMD,mikumikudance ">
+
+        <title>
+            {page_title}
+        </title>
+
+        <link rel="icon" type="image/jpg" href="/image/favicon.jpg">
+        <link rel="stylesheet" href="/style.css">
+    </head>
+     
+    <body>
+        <main>
+            <div class="{class_name}">\n\n"""
+    
+    tail = f"""\
+            </div>
+            
+        </main>
+
+        <script src="/script.js"></script>
+        
+    </body>
+</html>"""
+    
+    match part_number:
+        case 0 | 1:
+            return head
+        case 2 | 3:
+            return tail
+        case _:
+            raise ValueError("Error: Wrong part number.")
 
 if __name__ == "__main__":
     print("This module is not meant to be run directly. It contains helper " +  
