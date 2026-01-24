@@ -92,12 +92,12 @@ def get_txt_file_path(folder_path: Path):
 
     return [file_path, file_path_zh]
 
-def general_part_return(part_number: int, folder_path: Path, page_title: str, class_name: str):
+def general_part_return(part_number: int, file_path: str, page_title: str, class_name: str):
     """
     Return head or tail of the general HTML.
 
     :param part_number: 0 for head, 1 for head-zh, 2 for tail, 3 for tail-zh
-    :param folder_path: the folder path
+    :param file_path: the file path without language.html
     :param page_title: the title of the page
     :param class_name: the class name for CSS
     :return: str of head or tail
@@ -126,8 +126,8 @@ def general_part_return(part_number: int, folder_path: Path, page_title: str, cl
         "nav_contact_link" : "#bottom",
 
         "nav_lang_text" : "CHN" if is_en else "ENG",
-        "nav_lang_link" : (f"/{folder_path.as_posix()}/{folder_path.name}-zh.html" 
-                           if is_en else f"/{folder_path.as_posix()}/{folder_path.name}.html"),
+        "nav_lang_link" : (f"{file_path}-zh.html" 
+                           if is_en else f"{file_path}.html"),
         
         "footer_text" : "Top" if is_en else "回到顶部"
     }

@@ -193,7 +193,9 @@ def blog_part_return(part_number: int, folder_path: Path):
     title = "SableFiSh"
     class_name = "blogpagemain"
 
-    return general_part_return(part_number, folder_path, title, class_name)
+    file_path = "/" + folder_path.as_posix() + "/" + folder_path.name
+
+    return general_part_return(part_number, file_path, title, class_name)
 
 def generate_blog_page(folder_path: Path):
     """
