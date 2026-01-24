@@ -92,12 +92,12 @@ def get_txt_file_path(folder_path: Path):
 
     return [file_path, file_path_zh]
 
-def general_part_return(part_number: int, folder_Path: Path, page_title: str, class_name: str):
+def general_part_return(part_number: int, folder_path: Path, page_title: str, class_name: str):
     """
     Return head or tail of the general HTML.
 
     :param part_number: 0 for head, 1 for head-zh, 2 for tail, 3 for tail-zh
-    :param folder_Path: the folder path
+    :param folder_path: the folder path
     :param page_title: the title of the page
     :param class_name: the class name for CSS
     :return: str of head or tail
@@ -106,12 +106,35 @@ def general_part_return(part_number: int, folder_Path: Path, page_title: str, cl
     is_en = part_number in [0, 2]
 
     context = {
-        "lang" : "en" if is_en else "zh-CN"
+        "lang_code" : "en" if is_en else "zh-CN",
+        "home_link" : "/" if is_en else "/index-zh.html",
+
+        "nav_video" : "VIDEOS" if is_en else "视频",
+        "nav_video_link" : ("https://www.youtube.com/@SableFiSh" 
+                            if is_en else "https://space.bilibili.com/49323671"),
+
+        "nav_stage_text" : "STAGES" if is_en else "场景",
+        "nav_stage_link" : "/stages.html" if is_en else "/stages-zh.html",
+
+        "nav_blog_text"  : "BLOG" if is_en else "文章",
+        "nav_blog_link"  : "/blog.html" if is_en else "/blog-zh.html",
+
+        "nav_home_text" : "HOME" if is_en else "主页",
+        "nav_home_link" : "/" if is_en else "/index-zh.html",
+
+        "nav_contact_text" : "CONTACT" if is_en else "联系我",
+        "nav_contact_link" : "#bottom",
+
+        "nav_lang_text" : "CHN" if is_en else "ENG",
+        "nav_lang_link" : (f"/{folder_path.as_posix()}/{folder_path.name}-zh.html" 
+                           if is_en else f"/{folder_path.as_posix()}/{folder_path.name}.html"),
+        
+        "footer_text" : "Top" if is_en else "回到顶部"
     }
 
     head = f"""\
 <!DOCTYPE html>
-<html lang="{context['lang']}">
+<html lang="{context['lang_code']}">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -124,16 +147,116 @@ def general_part_return(part_number: int, folder_Path: Path, page_title: str, cl
 
         <link rel="icon" type="image/jpg" href="/image/favicon.jpg">
         <link rel="stylesheet" href="/style.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@100..900&display=swap" rel="stylesheet">
     </head>
      
     <body>
-        <main>
+        <header id="header"> 
+            <a href="{context['home_link']}">
+                <div class="SableFiSh">
+                    SableFiSh
+                </div>
+            </a>
+            <a href="{context['home_link']}">
+                <div class="Studio">
+                    STUDIO
+                </div>
+            </a>
+        </header>
+
+        <nav id="top">
+            <div class="leftbar">
+                <a href="{context['nav_video_link']}">
+                    <div>{context['nav_video']}</div>
+                </a>
+        
+                <a href="{context['nav_stage_link']}">
+                    <div>{context['nav_stage_text']}</div>
+                </a>
+
+                <a href="{context['nav_blog_link']}">
+                    <div>{context['nav_blog_text']}</div>
+                </a>
+
+            </div>
+
+            <div class="rightbar">
+                <a href="{context['nav_home_link']}">
+                    <div>{context['nav_home_text']}</div>
+                </a>
+
+                <a href="{context['nav_contact_link']}">
+                    <div>{context['nav_contact_text']}</div>
+                </a>
+
+                <a href="{context['nav_lang_link']}">
+                    <div>{context['nav_lang_text']}</div>
+                </a>
+
+            </div>
+        </nav>
+
+        <main class="show">
             <div class="{class_name}">\n\n"""
     
     tail = f"""\
-            </div>
-            
+            </div>  
         </main>
+
+        <footer id="bottom">
+            <div class="footer-left">
+                <div class="footer-container">
+                    <a href="https://www.youtube.com/@SableFiSh">
+                        <div>
+                            Youtube
+                        </div>
+                    </a>
+                    <a href="https://space.bilibili.com/49323671">
+                        <div>
+                            Bilibili
+                        </div>
+                    </a>
+                    <a href="https://www.artstation.com/sablefish">
+                        <div>
+                            ArtStation
+                        </div>
+                    </a>
+                    <a href="mailto:sablefish357@gmail.com">
+                        <div>
+                            sablefish357@gmail.com
+                        </div>
+                    </a>
+                    <a href="#top">
+                        <div>
+                            {context['footer_text']}
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="copyright">
+                    <div>
+                        © 2024 SableFiSh. All Rights Reserved.
+                    </div>
+                </div>
+            </div>
+
+            <div class="foot-logo-container">
+                <a href="#top">
+                    <div class="SableFiSh">
+                        SableFiSh
+                    </div>
+                </a>
+                <a href="#top">
+                    <div class="Studio">
+                        STUDIO
+                    </div>
+                </a>
+            </div>
+
+        </footer>
 
         <script src="/script.js"></script>
         

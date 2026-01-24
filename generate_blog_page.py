@@ -181,19 +181,19 @@ def write_blog_page_tail(folder_path: Path):
         raise e
 
 
-def blog_part_return(part_number: int, folder_Path: Path):
+def blog_part_return(part_number: int, folder_path: Path):
     """
     Return head or tail of the blog HTML.
 
     :param part_number: 0 for head, 1 for head-zh, 2 for tail, 3 for tail-zh
-    :param folder_Path: the folder path
+    :param folder_path: the folder path
     :return: str of head or tail
     """
 
     title = "SableFiSh"
     class_name = "blogpagemain"
 
-    return general_part_return(part_number, folder_Path, title, class_name)
+    return general_part_return(part_number, folder_path, title, class_name)
 
 def generate_blog_page(folder_path: Path):
     """
