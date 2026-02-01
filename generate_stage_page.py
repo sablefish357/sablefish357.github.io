@@ -26,10 +26,10 @@ def write_stage_page_head(folder_path: Path):
 
     try:
         with open(path_list[0], "w", encoding="utf-8") as file:
-            file.write(stage_part_return(0))
+            file.write(stage_part_return(0, folder_path))
 
         with open(path_list[1], "w", encoding="utf-8") as file:
-            file.write(stage_part_return(1))
+            file.write(stage_part_return(1, folder_path))
 
     except Exception as e:
         print(f"Error: When writing head for {folder_path.name}.")
@@ -282,88 +282,29 @@ def write_stage_page_tail(folder_path: Path):
 
     try:
         with open(path_list[0], "a", encoding="utf-8") as file:
-            file.write(stage_part_return(2))
+            file.write(stage_part_return(2, folder_path))
 
         with open(path_list[1], "a", encoding="utf-8") as file:
-            file.write(stage_part_return(2))
+            file.write(stage_part_return(3, folder_path))
     except Exception as e:
         print(f"Error: When writing tail for {folder_path.name}.")
         raise e
         
     
-def stage_part_return(part_number: int):
+def stage_part_return(part_number: int, folder_path: Path):
     """
     Return the head or tail of the stage page HTML.
 
-    :param part_number: 0 for head, 1 for head-zh, 2 for tail
+    :param part_number: 0 for head, 1 for head-zh, 2 for tail, 3 for tail-zh
     :return: str of head or tail
     """
 
-    head = """\
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="This is SableFiSh's personal page.">
-        <meta name="keywords" content="Blender,SableFiSh,MMD,mikumikudance ">
+    title = "SableFiSh"
+    class_name = "stagepagemain"
 
-        <title>
-            SableFiSh
-        </title>
+    file_path = "/" + folder_path.as_posix() + "/" + folder_path.name
 
-        <link rel="icon" type="image/jpg" href="/image/favicon.jpg">
-        <link rel="stylesheet" href="/style.css">
-
-        <script src="/addelements.js" defer></script>
-    </head>
-     
-    <body>
-        <main>
-            <div class="stagepagemain">\n\n"""
-
-    head_zh = """\
-<!DOCTYPE html>
-<html lang="zh-CN">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="This is SableFiSh's personal page.">
-        <meta name="keywords" content="Blender,SableFiSh,MMD,mikumikudance ">
-
-        <title>
-            SableFiSh
-        </title>
-
-        <link rel="icon" type="image/jpg" href="/image/favicon.jpg">
-        <link rel="stylesheet" href="/style.css">
-
-        <script src="/addelements_zh.js" defer></script>
-    </head>
-     
-    <body>
-        <main>
-            <div class="stagepagemain">\n\n"""
-
-    tail = """\
-            </div>
-            
-        </main>
-
-        <script src="/script.js"></script>
-        
-    </body>
-</html>"""
-
-    match part_number:
-        case 0:
-            return head
-        case 1:
-            return head_zh
-        case 2:
-            return tail
-        case _:
-            raise ValueError("Error: Wrong part number.")
+    return general_part_return(part_number, file_path, title, class_name)
 
 def generate_stage_page(folder_path: Path):
     """
