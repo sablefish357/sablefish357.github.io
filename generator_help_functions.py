@@ -105,9 +105,19 @@ def general_part_return(part_number: int, file_path: str, page_title: str, class
 
     is_en = part_number in [0, 2]
 
+    if file_path == "index":
+        is_main_page = True
+    else:
+        is_main_page = False
+
     context = {
         "lang_code" : "en" if is_en else "zh-CN",
         "home_link" : "/" if is_en else "/index-zh.html",
+
+        "alt_link_en" : (f"https://sablefish357.github.io/{file_path}.html" 
+                         if not is_main_page else "https://sablefish357.github.io/"),
+        "alt_link_zh" : (f"https://sablefish357.github.io/{file_path}-zh.html"
+                         if not is_main_page else "https://sablefish357.github.io/index-zh.html"),
 
         "nav_video" : "VIDEOS" if is_en else "视频",
         "nav_video_link" : ("https://www.youtube.com/@SableFiSh" 
@@ -151,6 +161,10 @@ def general_part_return(part_number: int, file_path: str, page_title: str, class
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@100..900&display=swap" rel="stylesheet">
+
+        <link rel="alternate" hreflang="en" href="{context['alt_link_en']}">
+        <link rel="alternate" hreflang="zh" href="{context['alt_link_zh']}">
+        <link rel="alternate" hreflang="x-default" href="{context['alt_link_en']}">
     </head>
      
     <body>
