@@ -114,9 +114,9 @@ def general_part_return(part_number: int, file_path: str, page_title: str, class
         "lang_code" : "en" if is_en else "zh-CN",
         "home_link" : "/" if is_en else "/index-zh.html",
 
-        "alt_link_en" : (f"https://sablefish357.github.io/{file_path}.html" 
+        "alt_link_en" : (f"https://sablefish357.github.io{file_path}.html" 
                          if not is_main_page else "https://sablefish357.github.io/"),
-        "alt_link_zh" : (f"https://sablefish357.github.io/{file_path}-zh.html"
+        "alt_link_zh" : (f"https://sablefish357.github.io{file_path}-zh.html"
                          if not is_main_page else "https://sablefish357.github.io/index-zh.html"),
 
         "nav_video" : "VIDEOS" if is_en else "视频",
