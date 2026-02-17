@@ -1,0 +1,3 @@
+/t{} First stage of the website
+/i{blockpool v1.jpg, 90} A photo of a swimming pool made of blocks
+/p{start end} The first scene, blockpool, is now available for download. Please prioritize downloading from GitHub. The Baidu Netdisk download link is still being organized and may be made available in the future.

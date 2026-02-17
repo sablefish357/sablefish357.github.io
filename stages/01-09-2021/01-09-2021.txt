@@ -1,0 +1,5 @@
+/t{} VacantHouse
+/i{vacanthouse v1.jpg, 90} An empty wooden hall
+/p{default} The stage includes an opening; please replace it with your own logo.
+/v{} 4.2LTS
+/d{https://github.com/sablefish357/vacanthouse-01092021} GitHub

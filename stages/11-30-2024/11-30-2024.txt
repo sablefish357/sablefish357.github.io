@@ -1,0 +1,6 @@
+/t{} It'sMyGO!!!!!-ParkingLots
+/i{mygo!!! v1.jpg, 90} A photo from a parking lot concert.
+/p{default} Uncheck the mygo character collection to hide the character.
+/p{} Assets in the stage can be used individually.
+/v{} 4.4.0
+/d{https://github.com/sablefish357/MyGO-ParkingLots-11302024} GitHub

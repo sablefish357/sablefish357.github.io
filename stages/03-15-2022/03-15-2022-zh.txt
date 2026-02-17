@@ -1,0 +1,5 @@
+/t{} CherryGrove
+/i{cherrygrove v1.jpg, 90} 一张夕阳下樱花林的照片
+/p{default} 场景有一个片头, 请用自己的图标代替。
+/v{} 4.2LTS
+/d{https://github.com/sablefish357/cherrygrove-03152022} GitHub

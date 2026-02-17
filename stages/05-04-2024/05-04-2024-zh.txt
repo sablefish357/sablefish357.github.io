@@ -1,0 +1,5 @@
+/t{} MoonBase
+/i{MoonBase.jpg, 90} 一张月球基地的照片
+/p{default} 地球资产来自@samk9632。
+/v{} 4.4.0
+/d{https://github.com/sablefish357/MoonBase-05042024} GitHub

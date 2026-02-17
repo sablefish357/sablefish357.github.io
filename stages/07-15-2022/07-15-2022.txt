@@ -1,0 +1,5 @@
+/t{} GreenRailway
+/i{greenrailway v1.jpg, 90} A picture of the railroad tracks under the trees
+/p{default} The stage includes an opening; please replace it with your own logo.
+/v{} 4.2LTS
+/d{https://github.com/sablefish357/greenrailway-07152022} GitHub

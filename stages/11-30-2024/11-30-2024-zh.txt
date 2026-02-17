@@ -1,0 +1,6 @@
+/t{} It'sMyGO!!!!!-ParkingLots
+/i{mygo!!! v1.jpg, 90} 一张停车场演唱会的照片
+/p{default} 取消勾选mygo character集合来隐藏角色立牌。
+/p{} 场景中的资产可以单独使用。
+/v{} 4.4.0
+/d{https://github.com/sablefish357/MyGO-ParkingLots-11302024} GitHub
