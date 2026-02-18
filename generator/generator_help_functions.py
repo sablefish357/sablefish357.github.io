@@ -117,9 +117,68 @@ def get_title_from_folder(folder_path: Path):
         title = title_match.group("title")
         title_zh = title_match_zh.group("title")
     else:
-        raise ValueError("Error: Title not found in the txt file.")
+        raise ValueError("Error: Title not found in the txt file." + str(folder_path))
     
     return (title, title_zh)
+
+def get_title_image_from_folder(file_path: str):
+    """
+    Get title image from txt files in the folder.
+
+    :param file_path: the file path without language and .html
+    :return: image name
+    """
+    i_regex = (r"^/i\{(?P<image_name>[^,}]*)\s*,"
+               r"\s*(?P<image_size>[^,}]*)\s*\}"
+               r"\s*(?P<description>.*)$")  
+    # match /i{image_name, image_size} description
+
+    i_re = re.compile(i_regex)
+
+    txt_path = Path("." + file_path + ".txt")
+
+    file = txt_path.read_text(encoding="utf-8").splitlines()
+
+    image_match = i_re.match(file[1])
+
+    if image_match:
+        image_name = image_match.group("image_name")
+        return image_name
+    else:
+        raise ValueError("Error: Image not found in the txt file." + file_path)
+    
+def get_og_image_url(file_path: str):
+    """
+    Get og image url for the page.
+
+    :param file_path: the file path without language.html
+    :return: the og image url
+    """
+
+    
+    base_url = "https://sablefish357.github.io"
+
+    if file_path == "/index":
+        return base_url + "/image/og_image_index.jpg"
+    
+    if file_path == "/stages":
+        return base_url + "/image/og_image_stages.jpg"
+    
+    if file_path == "/blog":
+        return base_url + "/image/og_image_blog.jpg"
+    
+    if file_path == "/music":
+        return base_url + "/image/og_image_music.jpg"
+    
+    if file_path.startswith("/stages/"):
+        image_name = get_title_image_from_folder(file_path)
+        return base_url + f"/stages/{file_path.split('/')[-1]}/{image_name}"
+    
+    if file_path.startswith("/blogs/"):
+        image_name = get_title_image_from_folder(file_path)
+        return base_url + f"/blogs/{file_path.split('/')[-1]}/{image_name}"
+    
+    raise ValueError("Error: Unrecognized file path for og image url." + file_path)
 
 def general_part_return(part_number: int, 
                         file_path: str, 
@@ -139,7 +198,7 @@ def general_part_return(part_number: int,
 
     is_en = part_number in [0, 2]
 
-    if file_path == "index":
+    if file_path == "/index":
         is_main_page = True
     else:
         is_main_page = False
@@ -179,6 +238,10 @@ def general_part_return(part_number: int,
         "footer_text" : "Top" if is_en else "回到顶部"
     }
 
+    og_url = context['alt_link_en'] if is_en else context['alt_link_zh']
+
+    og_image_url = get_og_image_url(file_path)
+
     head = f"""\
 <!DOCTYPE html>
 <html lang="{context['lang_code']}">
@@ -194,6 +257,13 @@ def general_part_return(part_number: int,
 
         <link rel="icon" type="image/jpg" href="/image/favicon.jpg">
         <link rel="stylesheet" href="/style.css">
+
+        <meta property="og:title" content="{context['page_title']}">
+        <meta property="og:description" content="{context['description']}">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="{og_url}">
+        <meta property="og:site_name" content="SableFiSh Studio">
+        <meta property="og:image" content="{og_image_url}">
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -289,7 +359,7 @@ def general_part_return(part_number: int,
                 
                 <div class="copyright">
                     <div>
-                        © 2024 SableFiSh. All Rights Reserved.
+                        © 2026 SableFiSh. All Rights Reserved.
                     </div>
                 </div>
             </div>

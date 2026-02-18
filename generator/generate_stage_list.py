@@ -1,7 +1,7 @@
 import sys
 import re
 from pathlib import Path
-from generator_help_functions import *
+from generator.generator_help_functions import *
 sys.stdout.reconfigure(encoding='utf-8') # type: ignore
 
 
@@ -68,7 +68,7 @@ def get_body_part_of_stage_list(folder_path: Path, is_first: bool = False):
         title = title_match.group("title")
         title_zh = title_match_zh.group("title")
     else:
-        raise ValueError("Error: Title not found in the txt file.")
+        raise ValueError("Error: Title not found in the txt file." + str(folder_path))
     
     date = folder_path.name
 
@@ -83,7 +83,7 @@ def get_body_part_of_stage_list(folder_path: Path, is_first: bool = False):
         image_name_zh = image_match_zh.group("image_name")
         description_zh = image_match_zh.group("description")
     else:
-        raise ValueError("Error: Image not found in the txt file.")
+        raise ValueError("Error: Image not found in the txt file." + str(folder_path))
 
     if is_first:
         stage_list_class = "stagecontainer firststagecontainer"

@@ -1,7 +1,7 @@
 import sys
 import re
 from pathlib import Path
-from generator_help_functions import *
+from generator.generator_help_functions import *
 sys.stdout.reconfigure(encoding='utf-8') # type: ignore
 
 def get_default_readme_path():
