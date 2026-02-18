@@ -176,7 +176,7 @@ def get_og_image_url(file_path: str):
     if file_path.startswith("/blog/"):
         return base_url + f"/blog/{file_path.split('/')[-1]}/{image_name}"
     
-    raise ValueError("Error: Image url not found for the file path.")
+    raise ValueError("Error: Image url not found for the file path." + file_path)
 
 def general_part_return(part_number: int, 
                         file_path: str, 
