@@ -227,12 +227,13 @@ def stage_list_part_return(part_number: int):
     :return: str of head or tail
     """
 
-    title = "SableFiSh"
-    class_name = "stagelist"
+    title = ("Stages | SableFiSh Studio", "场景 | SableFiSh Studio")
+    description = ("Collection of 3D environments and project archives.", "3D场景与项目作品索引。")
 
+    class_name = "stagelist"
     file_path = "/stages"
 
-    return general_part_return(part_number, file_path, title, class_name)
+    return general_part_return(part_number, file_path, title, description, class_name)
 
 def generate_stage_list():
     """

@@ -228,12 +228,13 @@ def blog_list_part_return(part_number: int):
     :return: str of head or tail
     """
 
-    title = "SableFiSh"
+    title = ("Blog | SableFiSh Studio", "文章 | SableFiSh Studio")
+    description = ("A personal archive of thoughts and experiments.", "个人文章与创作实验档案。")
+    
     class_name = "bloglist"
-
     file_path = "/blog"
 
-    return general_part_return(part_number, file_path, title, class_name)
+    return general_part_return(part_number, file_path, title, description, class_name)
 
 def generate_blog_list():
     """

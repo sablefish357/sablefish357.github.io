@@ -250,18 +250,19 @@ def write_music_list_tail():
 
 def music_list_part_return(part_number: int):
     """
-    Return head or tail of the blog html
+    Return head or tail of the music list html
 
     :param part_number: 0 for head, 1 for head-zh, 2 for tail, 3 for tail-zh
     :return: str of head or tail
     """
 
-    title = "SableFiSh"
-    class_name = "musiclist"
+    title = ("FiShMuSic | SableFiSh Studio", "FiShMuSic 音乐精选 | SableFiSh Studio")
+    description = ("A personal archive of my favorite music.", "个人音乐精选档案。")
 
+    class_name = "musiclist"
     file_path = "/music"
 
-    return general_part_return(part_number, file_path, title, class_name)
+    return general_part_return(part_number, file_path, title, description, class_name)
 
 def generate_music_list():
     """Generate the music list HTML files from music folder.

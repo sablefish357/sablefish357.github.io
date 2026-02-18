@@ -299,12 +299,15 @@ def stage_part_return(part_number: int, folder_path: Path):
     :return: str of head or tail
     """
 
-    title = "SableFiSh"
-    class_name = "stagepagemain"
+    title_short = get_title_from_folder(folder_path)
 
+    title = (f"{title_short[0]} | SableFiSh Studio", f"{title_short[1]} | SableFiSh Studio")
+    description = (f"Archived stage: {title_short[0]}.", f"场景档案：{title_short[1]}。")
+
+    class_name = "stagepagemain"
     file_path = "/" + folder_path.as_posix() + "/" + folder_path.name
 
-    return general_part_return(part_number, file_path, title, class_name)
+    return general_part_return(part_number, file_path, title, description, class_name)
 
 def generate_stage_page(folder_path: Path):
     """

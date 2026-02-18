@@ -1,5 +1,5 @@
 from pathlib import Path
-
+import re
 
 def save_temp_file(file_path: list[Path]):
     """
@@ -92,13 +92,47 @@ def get_txt_file_path(folder_path: Path):
 
     return [file_path, file_path_zh]
 
-def general_part_return(part_number: int, file_path: str, page_title: str, class_name: str):
+def get_title_from_folder(folder_path: Path):
+    """
+    Get title from txt files in the folder.
+
+    :param folder_path: the folder path
+    :return: a tuple of (en_title, zh_title)
+    """
+
+    t_regex = r"^/t\{\}\s*(?P<title>.*)$"  
+    #match /t{} title
+
+    t_re = re.compile(t_regex)
+
+    txt_path = get_txt_file_path(folder_path)
+
+    file = txt_path[0].read_text(encoding="utf-8").splitlines()
+    file_zh = txt_path[1].read_text(encoding="utf-8").splitlines()
+
+    title_match = t_re.match(file[0])
+    title_match_zh = t_re.match(file_zh[0])
+
+    if title_match and title_match_zh:
+        title = title_match.group("title")
+        title_zh = title_match_zh.group("title")
+    else:
+        raise ValueError("Error: Title not found in the txt file.")
+    
+    return (title, title_zh)
+
+def general_part_return(part_number: int, 
+                        file_path: str, 
+                        page_title: tuple[str, str],
+                        description: tuple[str, str],
+                        class_name: str):
     """
     Return head or tail of the general HTML.
 
     :param part_number: 0 for head, 1 for head-zh, 2 for tail, 3 for tail-zh
     :param file_path: the file path without language.html
-    :param page_title: the title of the page
+    :param page_title: the title of the page, a tuple of (en_title, zh_title)
+    :param description: the description of the page, a tuple of (en_description, zh_description)
     :param class_name: the class name for CSS
     :return: str of head or tail
     """
@@ -113,6 +147,9 @@ def general_part_return(part_number: int, file_path: str, page_title: str, class
     context = {
         "lang_code" : "en" if is_en else "zh-CN",
         "home_link" : "/" if is_en else "/index-zh.html",
+
+        "page_title" : page_title[0] if is_en else page_title[1],
+        "description" : description[0] if is_en else description[1],
 
         "alt_link_en" : (f"https://sablefish357.github.io{file_path}.html" 
                          if not is_main_page else "https://sablefish357.github.io/"),
@@ -148,11 +185,11 @@ def general_part_return(part_number: int, file_path: str, page_title: str, class
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="This is SableFiSh's personal page.">
+        <meta name="description" content="{context['description']}">
         <meta name="keywords" content="Blender,SableFiSh,MMD,mikumikudance ">
 
         <title>
-            {page_title}
+            {context['page_title']}
         </title>
 
         <link rel="icon" type="image/jpg" href="/image/favicon.jpg">
