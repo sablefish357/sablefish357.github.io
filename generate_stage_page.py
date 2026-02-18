@@ -301,8 +301,8 @@ def stage_part_return(part_number: int, folder_path: Path):
 
     title_short = get_title_from_folder(folder_path)
 
-    title = (f"{title_short[0]} | SableFiSh Studio", f"{title_short[1]} | SableFiSh Studio")
-    description = (f"Archived stage: {title_short[0]}.", f"场景档案：{title_short[1]}。")
+    title = (f"{title_short[0]} | Stages | SableFiSh Studio", f"{title_short[1]} | 场景 | SableFiSh Studio")
+    description = (f"Archived stage: {title_short[0]}.", f"场景档案: {title_short[1]}。")
 
     class_name = "stagepagemain"
     file_path = "/" + folder_path.as_posix() + "/" + folder_path.name
