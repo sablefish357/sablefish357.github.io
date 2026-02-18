@@ -156,7 +156,6 @@ def get_og_image_url(file_path: str):
 
     
     base_url = "https://sablefish357.github.io"
-    image_name = get_title_image_from_folder(file_path)
 
     if file_path == "/index":
         return base_url + "/image/og_image_index.jpg"
@@ -171,9 +170,11 @@ def get_og_image_url(file_path: str):
         return base_url + "/image/og_image_music.jpg"
     
     if file_path.startswith("/stages/"):
+        image_name = get_title_image_from_folder(file_path)
         return base_url + f"/stages/{file_path.split('/')[-1]}/{image_name}"
     
     if file_path.startswith("/blog/"):
+        image_name = get_title_image_from_folder(file_path)
         return base_url + f"/blog/{file_path.split('/')[-1]}/{image_name}"
     
     raise ValueError("Error: Image url not found for the file path." + file_path)
