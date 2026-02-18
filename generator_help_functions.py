@@ -117,7 +117,7 @@ def get_title_from_folder(folder_path: Path):
         title = title_match.group("title")
         title_zh = title_match_zh.group("title")
     else:
-        raise ValueError("Error: Title not found in the txt file.")
+        raise ValueError("Error: Title not found in the txt file." + str(folder_path))
     
     return (title, title_zh)
 
@@ -135,16 +135,17 @@ def get_title_image_from_folder(file_path: str):
 
     i_re = re.compile(i_regex)
 
-    txt_path = Path(file_path + ".txt")
+    txt_path = Path("." + file_path + ".txt")
 
     file = txt_path.read_text(encoding="utf-8").splitlines()
+
     image_match = i_re.match(file[1])
 
     if image_match:
         image_name = image_match.group("image_name")
         return image_name
     else:
-        raise ValueError("Error: Image not found in the txt file.")
+        raise ValueError("Error: Image not found in the txt file." + file_path)
     
 def get_og_image_url(file_path: str):
     """
@@ -173,11 +174,11 @@ def get_og_image_url(file_path: str):
         image_name = get_title_image_from_folder(file_path)
         return base_url + f"/stages/{file_path.split('/')[-1]}/{image_name}"
     
-    if file_path.startswith("/blog/"):
+    if file_path.startswith("/blogs/"):
         image_name = get_title_image_from_folder(file_path)
-        return base_url + f"/blog/{file_path.split('/')[-1]}/{image_name}"
+        return base_url + f"/blogs/{file_path.split('/')[-1]}/{image_name}"
     
-    raise ValueError("Error: Image url not found for the file path." + file_path)
+    raise ValueError("Error: Unrecognized file path for og image url." + file_path)
 
 def general_part_return(part_number: int, 
                         file_path: str, 
