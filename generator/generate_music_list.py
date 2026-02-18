@@ -2,8 +2,7 @@ import sys
 from pathlib import Path
 import eyed3
 import logging
-import re
-from generator_help_functions import *
+from generator.generator_help_functions import *
 sys.stdout.reconfigure(encoding='utf-8') # type: ignore
 
 logging.getLogger("eyed3").setLevel(logging.ERROR)

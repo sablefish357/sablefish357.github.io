@@ -1,8 +1,8 @@
-from generate_blog_list import generate_blog_list
-from generate_blog_page import generate_all_blog_pages
-from generate_music_list import generate_music_list
-from generate_stage_list import generate_stage_list
-from generate_stage_page import generate_all_stage_pages
+from generator.generate_blog_list import generate_blog_list
+from generator.generate_blog_page import generate_all_blog_pages
+from generator.generate_music_list import generate_music_list
+from generator.generate_stage_list import generate_stage_list
+from generator.generate_stage_page import generate_all_stage_pages
 import time
 
 if __name__ == "__main__":

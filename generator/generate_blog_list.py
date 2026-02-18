@@ -1,7 +1,7 @@
 import re
 import sys
 from pathlib import Path
-from generator_help_functions import *
+from generator.generator_help_functions import *
 sys.stdout.reconfigure(encoding='utf-8') # type: ignore
 
 
