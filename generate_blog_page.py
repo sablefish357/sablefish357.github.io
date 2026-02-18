@@ -190,12 +190,15 @@ def blog_part_return(part_number: int, folder_path: Path):
     :return: str of head or tail
     """
 
-    title = "SableFiSh"
-    class_name = "blogpagemain"
+    title_short = get_title_from_folder(folder_path)
 
+    title = (f"{title_short[0]} | Blog | SableFiSh Studio", f"{title_short[1]} | 文章 | SableFiSh Studio")
+    description = (f"Archived blog: {title_short[0]}.", f"文章档案: {title_short[1]}。")
+
+    class_name = "blogpagemain"
     file_path = "/" + folder_path.as_posix() + "/" + folder_path.name
 
-    return general_part_return(part_number, file_path, title, class_name)
+    return general_part_return(part_number, file_path, title, description, class_name)
 
 def generate_blog_page(folder_path: Path):
     """
