@@ -1,7 +1,7 @@
 from pathlib import Path
 import re
 
-def save_temp_file(file_path: list[Path]):
+def save_temp_file(file_path: list[Path]) -> None:
     """
     Save old file if exists as .bak file
     
@@ -19,7 +19,7 @@ def save_temp_file(file_path: list[Path]):
                 raise e
             
 
-def restore_temp_file(file_path: list[Path]):
+def restore_temp_file(file_path: list[Path]) -> None:
     """
     Delete created html file if exists and restore the backup file from .bak 
     file
@@ -39,7 +39,7 @@ def restore_temp_file(file_path: list[Path]):
                 raise e
             
             
-def delete_temp_file(file_path: list[Path]):
+def delete_temp_file(file_path: list[Path]) -> None:
     """
     Delete temporary .bak file
 
@@ -57,7 +57,7 @@ def delete_temp_file(file_path: list[Path]):
                 raise e
 
 
-def get_html_file_path(folder_path: Path):
+def get_html_file_path(folder_path: Path) -> list[Path]:
     """
     Use folder path to get html file path with same name as the folder.
 
@@ -75,7 +75,7 @@ def get_html_file_path(folder_path: Path):
     return [file_path, file_path_zh]
 
 
-def get_txt_file_path(folder_path: Path):
+def get_txt_file_path(folder_path: Path) -> list[Path]:
     """
     Use folder path to get txt file path with same name as the folder.
 
@@ -92,7 +92,7 @@ def get_txt_file_path(folder_path: Path):
 
     return [file_path, file_path_zh]
 
-def get_title_from_folder(folder_path: Path):
+def get_title_from_folder(folder_path: Path) -> tuple[str, str]:
     """
     Get title from txt files in the folder.
 
@@ -121,7 +121,7 @@ def get_title_from_folder(folder_path: Path):
     
     return (title, title_zh)
 
-def get_title_image_from_folder(file_path: str):
+def get_title_image_from_folder(file_path: str) -> str:
     """
     Get title image from txt files in the folder.
 
@@ -147,7 +147,7 @@ def get_title_image_from_folder(file_path: str):
     else:
         raise ValueError("Error: Image not found in the txt file." + file_path)
     
-def get_og_image_url(file_path: str):
+def get_og_image_url(file_path: str) -> str:
     """
     Get og image url for the page.
 
@@ -184,7 +184,7 @@ def general_part_return(part_number: int,
                         file_path: str, 
                         page_title: tuple[str, str],
                         description: tuple[str, str],
-                        class_name: str):
+                        class_name: str) -> str:
     """
     Return head or tail of the general HTML.
 

@@ -5,7 +5,7 @@ from generator.generator_help_functions import *
 sys.stdout.reconfigure(encoding='utf-8') # type: ignore
 
 
-def get_stage_list_path():
+def get_stage_list_path() -> list[Path]:
     """
     Get the stage list path.
     
@@ -15,7 +15,7 @@ def get_stage_list_path():
     return [Path("./stages.html"), Path("./stages-zh.html")]
 
 
-def write_stage_list_head():
+def write_stage_list_head() -> None:
     """
     Write stage list head.
     
@@ -35,7 +35,7 @@ def write_stage_list_head():
         print(f"Error: When writing head for stage_list.")
         raise e
 
-def get_body_part_of_stage_list(folder_path: Path, is_first: bool = False):
+def get_body_part_of_stage_list(folder_path: Path, is_first: bool = False) -> list[str]:
     """
     Get the body part of the stage list.
 
@@ -135,7 +135,7 @@ def get_body_part_of_stage_list(folder_path: Path, is_first: bool = False):
     return [body, body_zh]
 
 
-def get_all_stage_folders():
+def get_all_stage_folders() -> list[Path]:
     """
     Get all stage folders.
     
@@ -165,7 +165,7 @@ def get_all_stage_folders():
     return folder_list
 
 
-def write_stage_list_body():
+def write_stage_list_body() -> int:
     """
     Write the body of the stage list.
     
@@ -199,7 +199,7 @@ def write_stage_list_body():
     return l_number
 
 
-def write_stage_list_tail():
+def write_stage_list_tail() -> None:
     """
     Write the tail of the stage list.
     
@@ -219,7 +219,7 @@ def write_stage_list_tail():
         raise e
 
 
-def stage_list_part_return(part_number: int):
+def stage_list_part_return(part_number: int) -> str:
     """
     Return the head or tail of the stage list HTML.
 
@@ -235,7 +235,7 @@ def stage_list_part_return(part_number: int):
 
     return general_part_return(part_number, file_path, title, description, class_name)
 
-def generate_stage_list():
+def generate_stage_list() -> None:
     """
     Generate the stage list HTML files.
     
