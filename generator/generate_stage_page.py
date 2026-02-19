@@ -4,7 +4,7 @@ from pathlib import Path
 from generator.generator_help_functions import *
 sys.stdout.reconfigure(encoding='utf-8') # type: ignore
 
-def get_default_readme_path():
+def get_default_readme_path() -> list[Path]:
     """
     Get the default README file path.
     
@@ -14,7 +14,7 @@ def get_default_readme_path():
     return [Path("./stages/README.txt"), Path("./stages/README-zh.txt")]
 
 
-def write_stage_page_head(folder_path: Path):
+def write_stage_page_head(folder_path: Path) -> None:
     """
     Write both head of the stage page HTML file.
 
@@ -36,7 +36,7 @@ def write_stage_page_head(folder_path: Path):
         raise e
         
 
-def readme_translate(readme_file: Path):
+def readme_translate(readme_file: Path) -> str:
     """
     Translate the README file to HTML part.
 
@@ -80,7 +80,7 @@ def readme_translate(readme_file: Path):
 
 
 def txt_to_stage_body_translate(folder_path: Path, file_path: Path, 
-                                zh: bool = False):
+                                zh: bool = False) -> tuple[str, int]:
     """
     Translate the chosen file to HTML body.
 
@@ -236,7 +236,7 @@ def txt_to_stage_body_translate(folder_path: Path, file_path: Path,
             download_end), p_number
     
 
-def write_stage_page_body(folder_path: Path):
+def write_stage_page_body(folder_path: Path) -> tuple[int, int]:
     """
     Write the body of the stage page HTML file.
 
@@ -270,7 +270,7 @@ def write_stage_page_body(folder_path: Path):
     return p_number, p_number_zh
 
 
-def write_stage_page_tail(folder_path: Path):
+def write_stage_page_tail(folder_path: Path) -> None:
     """
     Write the tail of the stage page HTML file.
 
@@ -291,7 +291,7 @@ def write_stage_page_tail(folder_path: Path):
         raise e
         
     
-def stage_part_return(part_number: int, folder_path: Path):
+def stage_part_return(part_number: int, folder_path: Path) -> str:
     """
     Return the head or tail of the stage page HTML.
 
@@ -309,7 +309,7 @@ def stage_part_return(part_number: int, folder_path: Path):
 
     return general_part_return(part_number, file_path, title, description, class_name)
 
-def generate_stage_page(folder_path: Path):
+def generate_stage_page(folder_path: Path) -> None:
     """
     Generate the stage page.
     
@@ -335,7 +335,7 @@ def generate_stage_page(folder_path: Path):
         print("Restored the backup file.")
         sys.exit(1)
 
-def generate_all_stage_pages():
+def generate_all_stage_pages() -> None:
     """
     Generate all stage pages in the stages folder.
 

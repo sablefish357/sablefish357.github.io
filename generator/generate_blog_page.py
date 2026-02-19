@@ -4,7 +4,7 @@ from pathlib import Path
 from generator.generator_help_functions import *
 sys.stdout.reconfigure(encoding='utf-8') # type: ignore
 
-def write_blog_page_head(folder_path: Path):
+def write_blog_page_head(folder_path: Path) -> None:
     """
     Write the head of the blog page.
 
@@ -23,7 +23,7 @@ def write_blog_page_head(folder_path: Path):
         raise e
 
 
-def txt_to_body_translate(folder_path: Path, file_path: Path):
+def txt_to_body_translate(folder_path: Path, file_path: Path) -> tuple[str, int, int]:
     """
     Translate the chosen file to HTML body.
 
@@ -125,7 +125,7 @@ def txt_to_body_translate(folder_path: Path, file_path: Path):
     return body, p_number, i_number
 
 
-def write_blog_page_body(folder_path: Path):
+def write_blog_page_body(folder_path: Path) -> tuple[int, int, int, int]:
     """
     Write the body of the blog page.
 
@@ -160,7 +160,7 @@ def write_blog_page_body(folder_path: Path):
     return p_number, i_number, p_number_zh, i_number_zh
 
 
-def write_blog_page_tail(folder_path: Path):
+def write_blog_page_tail(folder_path: Path) -> None:
     """
     Write the tail of the blog page.
 
@@ -181,7 +181,7 @@ def write_blog_page_tail(folder_path: Path):
         raise e
 
 
-def blog_part_return(part_number: int, folder_path: Path):
+def blog_part_return(part_number: int, folder_path: Path) -> str:
     """
     Return head or tail of the blog HTML.
 
@@ -200,7 +200,7 @@ def blog_part_return(part_number: int, folder_path: Path):
 
     return general_part_return(part_number, file_path, title, description, class_name)
 
-def generate_blog_page(folder_path: Path):
+def generate_blog_page(folder_path: Path) -> None:
     """
     Generate the blog page.
 
@@ -227,7 +227,7 @@ def generate_blog_page(folder_path: Path):
         print("Restored the backup file.")
         sys.exit(1)
 
-def generate_all_blog_pages():
+def generate_all_blog_pages() -> None:
     """
     Generate all blog pages in the blogs folder.
 

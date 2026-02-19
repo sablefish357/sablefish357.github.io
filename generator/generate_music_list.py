@@ -7,7 +7,7 @@ sys.stdout.reconfigure(encoding='utf-8') # type: ignore
 
 logging.getLogger("eyed3").setLevel(logging.ERROR)
 
-def get_music_folder_path():
+def get_music_folder_path() -> Path:
     """
     Get the path of the music folder.
     
@@ -17,7 +17,7 @@ def get_music_folder_path():
     return Path("./music")
 
 
-def get_music_list_path():
+def get_music_list_path() -> list[Path]:
     """
     Get the path of the music list HTML files.
     
@@ -27,7 +27,7 @@ def get_music_list_path():
     return [Path("./music.html"), Path("./music-zh.html")]
 
 
-def write_music_list_head():
+def write_music_list_head() -> None:
     """
     Write music list head
     
@@ -48,12 +48,12 @@ def write_music_list_head():
         raise e
 
 
-def generate_music_picture(music_path: Path):
+def generate_music_picture(music_path: Path) -> Path | None:
     """
     Generate the music cover under ./music/cover
      
     :param music_path: the music file path
-    :return: the path of the generated cover image, or an empty string if no cover is found
+    :return: the path of the generated cover image, or None if no cover is found
     """
 
     cover_path = get_music_folder_path() / "cover"
@@ -80,7 +80,7 @@ def generate_music_picture(music_path: Path):
         
 
 def get_body_part_of_music_list(music_path: Path, music_cover: Path,
-                                is_first: bool = False):
+                                is_first: bool = False) -> str | None:
     """Get the body part of the music list
     
     :param music_path: the music file path
@@ -143,7 +143,7 @@ def get_body_part_of_music_list(music_path: Path, music_cover: Path,
     return body
     
 
-def get_all_music_files():
+def get_all_music_files() -> list[Path]:
     """
     Get all music files in the music folder.
     
@@ -157,7 +157,7 @@ def get_all_music_files():
         if thing.is_file() and thing.suffix.lower() in {".mp3"}:
             music_files.append(thing)
 
-    def get_track_number(music_file: Path):
+    def get_track_number(music_file: Path) -> int:
         """
         Extract track number from the file name.
         
@@ -170,15 +170,15 @@ def get_all_music_files():
             if audio_file and audio_file.tag and audio_file.tag.track_num:
                 return audio_file.tag.track_num[0]
             else:
-                return float('inf')
+                return int('inf')
         except Exception as e:
-            return float('inf')
+            return int('inf')
 
     music_files.sort(key=get_track_number)
     return music_files
 
 
-def write_music_list_body():
+def write_music_list_body() -> int:
     """
     Write music list body
     
@@ -227,7 +227,7 @@ def write_music_list_body():
     return s_number
 
 
-def write_music_list_tail():
+def write_music_list_tail() -> None:
     """Write music list tail
     
     :return: None
@@ -247,7 +247,7 @@ def write_music_list_tail():
         raise e
 
 
-def music_list_part_return(part_number: int):
+def music_list_part_return(part_number: int) -> str:
     """
     Return head or tail of the music list html
 
@@ -263,7 +263,7 @@ def music_list_part_return(part_number: int):
 
     return general_part_return(part_number, file_path, title, description, class_name)
 
-def generate_music_list():
+def generate_music_list() -> None:
     """Generate the music list HTML files from music folder.
     
     :return: None

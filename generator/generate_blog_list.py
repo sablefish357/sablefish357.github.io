@@ -5,7 +5,7 @@ from generator.generator_help_functions import *
 sys.stdout.reconfigure(encoding='utf-8') # type: ignore
 
 
-def get_blog_list_path():
+def get_blog_list_path() -> list[Path]:
     """
     Get the blog list path.
 
@@ -15,7 +15,7 @@ def get_blog_list_path():
     return [Path("./blog.html"), Path("./blog-zh.html")]
 
 
-def write_blog_list_head():
+def write_blog_list_head() -> None:
     """
     Write the head of the blog list.
 
@@ -36,7 +36,7 @@ def write_blog_list_head():
         raise e
 
 
-def get_all_blog_folders():
+def get_all_blog_folders() -> list[Path]:
     """
     Get all blog folders.
 
@@ -66,7 +66,7 @@ def get_all_blog_folders():
     return folder_list
 
 
-def get_body_part_of_blog_list(folder_path: Path, is_first: bool = False):
+def get_body_part_of_blog_list(folder_path: Path, is_first: bool = False) -> list[str]:
     """
     Get the body part of the blog list.
     
@@ -166,7 +166,7 @@ def get_body_part_of_blog_list(folder_path: Path, is_first: bool = False):
     return [body, body_zh]
 
 
-def write_blog_list_body():
+def write_blog_list_body() -> int:
     """
     Write the body of the blog list.
     
@@ -200,7 +200,7 @@ def write_blog_list_body():
     return b_number
     
 
-def write_blog_list_tail():
+def write_blog_list_tail() -> None:
     """
     Write the tail of the blog list.
 
@@ -220,7 +220,7 @@ def write_blog_list_tail():
         raise e
 
 
-def blog_list_part_return(part_number: int):
+def blog_list_part_return(part_number: int) -> str:
     """
     Return head or tail of the blog list HTML.
 
@@ -236,7 +236,7 @@ def blog_list_part_return(part_number: int):
 
     return general_part_return(part_number, file_path, title, description, class_name)
 
-def generate_blog_list():
+def generate_blog_list() -> None:
     """
     Generate the blog list HTML files.
     
