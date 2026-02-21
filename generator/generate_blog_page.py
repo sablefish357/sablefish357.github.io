@@ -1,6 +1,7 @@
 import sys
 import re
 from pathlib import Path
+import logging
 from generator.generator_help_functions import save_temp_file, delete_temp_file, restore_temp_file, general_part_return, get_txt_file_path, get_html_file_path, get_title_from_folder
 
 def write_blog_page_head(folder_path: Path) -> None:
@@ -18,8 +19,8 @@ def write_blog_page_head(folder_path: Path) -> None:
         with open(path_list[1], "w", encoding="utf-8") as file:
             file.write(blog_part_return(1, folder_path))
     except Exception as e:
-        print(f"Error: When writing head for {folder_path.name}.")
-        raise e
+        logging.exception(f"Error: When writing head for {folder_path.name}.")
+        raise
 
 
 def txt_to_body_translate(folder_path: Path, file_path: Path) -> tuple[str, int, int]:
@@ -52,8 +53,8 @@ def txt_to_body_translate(folder_path: Path, file_path: Path) -> tuple[str, int,
     try:
         file = file_path.read_text(encoding="utf-8").splitlines()
     except Exception as e:
-        print(f"Error: When reading file {file_path.name}.")
-        raise e
+        logging.exception(f"Error: When reading file {file_path.name}.")
+        raise
     
     body = ""
 
@@ -120,6 +121,11 @@ def txt_to_body_translate(folder_path: Path, file_path: Path) -> tuple[str, int,
                         {content}
                     </p>
                 </div>\n\n"""
+        else:
+            logging.warning(f"Error: Undefined line found {line} in {file_path.name}.")
+
+    if i_number == 0:
+        logging.warning(f"Warning: No cover images found in {file_path.name}.")
 
     return body, p_number, i_number
 
@@ -153,8 +159,8 @@ def write_blog_page_body(folder_path: Path) -> tuple[int, int, int, int]:
         with open(path_list[1], "a", encoding="utf-8") as file:
             file.write(body_zh)
     except Exception as e:
-        print(f"Error: When writing body for {folder_path.name}.")
-        raise e
+        logging.exception(f"Error: When writing body for {folder_path.name}.")
+        raise
     
     return p_number, i_number, p_number_zh, i_number_zh
 
@@ -176,8 +182,8 @@ def write_blog_page_tail(folder_path: Path) -> None:
         with open(path_list[1], "a", encoding="utf-8") as file:
             file.write(blog_part_return(3, folder_path))
     except Exception as e:
-        print(f"Error: When writing tail for {folder_path.name}.")
-        raise e
+        logging.exception(f"Error: When writing tail for {folder_path.name}.")
+        raise
 
 
 def blog_part_return(part_number: int, folder_path: Path) -> str:
@@ -216,14 +222,14 @@ def generate_blog_page(folder_path: Path) -> None:
         write_blog_page_tail(folder_path)
         delete_temp_file(get_html_file_path(folder_path))
 
-        print(f"Translated blog page {folder_path.stem}: " +
+        logging.info(f"Translated blog page {folder_path.stem}: " +
               f"added {p_number} paragraphs {i_number} images (en), " +
               f"{p_number_zh} paragraphs {i_number_zh} images (zh).")
 
     except Exception as e:
-        print(f"Error: When translating blog in {folder_path.name}: {e}.")
+        logging.exception(f"Error: When translating blog in {folder_path.name}: {e}.")
         restore_temp_file(get_html_file_path(folder_path))
-        print("Restored the backup file.")
+        logging.info("Restored the backup file.")
         sys.exit(1)
 
 def generate_all_blog_pages() -> None:

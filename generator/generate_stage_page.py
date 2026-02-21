@@ -1,6 +1,7 @@
 import sys
 import re
 from pathlib import Path
+import logging
 from generator.generator_help_functions import save_temp_file, delete_temp_file, restore_temp_file, general_part_return, get_txt_file_path, get_html_file_path, get_title_from_folder
 
 def get_default_readme_path() -> list[Path]:
@@ -31,8 +32,8 @@ def write_stage_page_head(folder_path: Path) -> None:
             file.write(stage_part_return(1, folder_path))
 
     except Exception as e:
-        print(f"Error: When writing head for {folder_path.name}.")
-        raise e
+        logging.exception(f"Error: When writing head for {folder_path.name}.")
+        raise
         
 
 def readme_translate(readme_file: Path) -> str:
@@ -52,8 +53,8 @@ def readme_translate(readme_file: Path) -> str:
     try:
         file = readme_file.read_text(encoding="utf-8").splitlines()
     except Exception as e:
-        print(f"Error: When reading file {readme_file.name}.")
-        raise e
+        logging.exception(f"Error: When reading file {readme_file.name}.")
+        raise
 
     for line in file:
 
@@ -72,7 +73,7 @@ def readme_translate(readme_file: Path) -> str:
                         {content}
                     </p>\n"""
         else:
-            print(f"Error: Undefined line found {line} in {readme_file.name}.")
+            logging.warning(f"Error: Undefined line found {line} in {readme_file.name}.")
             
     return readme_part
 
@@ -113,8 +114,8 @@ def txt_to_stage_body_translate(folder_path: Path, file_path: Path,
     try:
         file = file_path.read_text(encoding="utf-8").splitlines()
     except Exception as e:
-        print(f"Error: When reading file {file_path.name}.")
-        raise e
+        logging.exception(f"Error: When reading file {file_path.name}.")
+        raise
     
     image_part = ""
     paragraph_part = ""
@@ -188,10 +189,10 @@ def txt_to_stage_body_translate(folder_path: Path, file_path: Path,
                         </p>
                     </a>\n"""
         else:
-            print(f"Error: Undefined line found {line} in {file_path.name}.")
+            logging.warning(f"Error: Undefined line found {line} in {file_path.name}.")
 
     if not image_part:
-        print(f"Error: No cover image found in {file_path.stem}.")
+        logging.warning(f"Error: No cover image found in {file_path.stem}.")
 
     paragraph_start = """\
                 <div class="stagepageparagraph">
@@ -263,8 +264,8 @@ def write_stage_page_body(folder_path: Path) -> tuple[int, int]:
         with open(path_list[1], "a", encoding="utf-8") as file:
             file.write(body_zh)
     except Exception as e:
-        print(f"Error: When writing body for stage {folder_path.name}.")
-        raise e
+        logging.exception(f"Error: When writing body for stage {folder_path.name}.")
+        raise
 
     return p_number, p_number_zh
 
@@ -286,8 +287,8 @@ def write_stage_page_tail(folder_path: Path) -> None:
         with open(path_list[1], "a", encoding="utf-8") as file:
             file.write(stage_part_return(3, folder_path))
     except Exception as e:
-        print(f"Error: When writing tail for {folder_path.name}.")
-        raise e
+        logging.exception(f"Error: When writing tail for {folder_path.name}.")
+        raise
         
     
 def stage_part_return(part_number: int, folder_path: Path) -> str:
@@ -324,14 +325,14 @@ def generate_stage_page(folder_path: Path) -> None:
         write_stage_page_tail(folder_path)
         delete_temp_file(get_html_file_path(folder_path))
 
-        print(f"Translated stage page {folder_path.stem}: " +
+        logging.info(f"Translated stage page {folder_path.stem}: " +
               f"added {p_number} paragraphs (en), " +
               f"{p_number_zh} paragraphs (zh).")
 
     except Exception as e:
-        print(f"Error: When translating stage page in {folder_path.name}: {e}.")
+        logging.exception(f"Error: When translating stage page in {folder_path.name}: {e}.")
         restore_temp_file(get_html_file_path(folder_path))
-        print("Restored the backup file.")
+        logging.info("Restored the backup file.")
         sys.exit(1)
 
 def generate_all_stage_pages() -> None:

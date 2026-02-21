@@ -1,0 +1,21 @@
+2026-02-21 15:18:12 | INFO     | main                .<module>             | Generating blog pages...
+2026-02-21 15:18:12 | INFO     | generate_blog_list  .generate_blog_list   | Added 1 blog(s) to the blog list.
+2026-02-21 15:18:12 | INFO     | generate_blog_page  .generate_blog_page   | Translated blog page 9-4-2024: added 1 paragraphs 1 images (en), 1 paragraphs 1 images (zh).
+2026-02-21 15:18:12 | INFO     | main                .<module>             | Blog pages generated.
+2026-02-21 15:18:12 | INFO     | main                .<module>             | Generating stage pages...
+2026-02-21 15:18:12 | INFO     | generate_stage_list .generate_stage_list  | Added 10 stage(s) to the stage list
+2026-02-21 15:18:12 | INFO     | generate_stage_page .generate_stage_page  | Translated stage page 01-09-2021: added 1 paragraphs (en), 1 paragraphs (zh).
+2026-02-21 15:18:12 | INFO     | generate_stage_page .generate_stage_page  | Translated stage page 02-13-2021: added 1 paragraphs (en), 1 paragraphs (zh).
+2026-02-21 15:18:12 | INFO     | generate_stage_page .generate_stage_page  | Translated stage page 03-06-2022: added 1 paragraphs (en), 1 paragraphs (zh).
+2026-02-21 15:18:12 | INFO     | generate_stage_page .generate_stage_page  | Translated stage page 03-15-2022: added 1 paragraphs (en), 1 paragraphs (zh).
+2026-02-21 15:18:12 | INFO     | generate_stage_page .generate_stage_page  | Translated stage page 03-31-2022: added 1 paragraphs (en), 1 paragraphs (zh).
+2026-02-21 15:18:12 | INFO     | generate_stage_page .generate_stage_page  | Translated stage page 05-04-2024: added 1 paragraphs (en), 1 paragraphs (zh).
+2026-02-21 15:18:12 | INFO     | generate_stage_page .generate_stage_page  | Translated stage page 05-12-2021: added 1 paragraphs (en), 1 paragraphs (zh).
+2026-02-21 15:18:12 | INFO     | generate_stage_page .generate_stage_page  | Translated stage page 07-15-2022: added 1 paragraphs (en), 1 paragraphs (zh).
+2026-02-21 15:18:12 | INFO     | generate_stage_page .generate_stage_page  | Translated stage page 11-30-2024: added 2 paragraphs (en), 2 paragraphs (zh).
+2026-02-21 15:18:12 | INFO     | generate_stage_page .generate_stage_page  | Translated stage page 12-30-2023: added 2 paragraphs (en), 2 paragraphs (zh).
+2026-02-21 15:18:12 | INFO     | main                .<module>             | Stage pages generated.
+2026-02-21 15:18:12 | INFO     | main                .<module>             | Generating music pages...
+2026-02-21 15:18:12 | INFO     | generate_music_list .generate_music_list  | Added 9 music(s) to the music list.
+2026-02-21 15:18:12 | INFO     | main                .<module>             | Music pages generated.
+2026-02-21 15:18:12 | INFO     | main                .<module>             | Total time: 0.29 seconds.
