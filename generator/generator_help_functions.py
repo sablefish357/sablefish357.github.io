@@ -260,8 +260,7 @@ def general_part_return(part_number: int,
                          if not is_main_page else f"{data['web_domain']}/index-zh.html"),
 
         "nav_video" : "VIDEOS" if is_en else "视频",
-        "nav_video_link" : ("https://www.youtube.com/@SableFiSh" 
-                            if is_en else "https://space.bilibili.com/49323671"),
+        "nav_video_link" : (data['youtube_link'] if is_en else data['bilibili_link']),
 
         "nav_stage_text" : "STAGES" if is_en else "场景",
         "nav_stage_link" : "/stages.html" if is_en else "/stages-zh.html",
@@ -301,6 +300,8 @@ def general_part_return(part_number: int,
 
         <link rel="icon" type="image/jpg" href="/image/favicon.jpg">
         <link rel="stylesheet" href="/style.css">
+
+        <link rel="canonical" href="{og_url}">
 
         <meta property="og:title" content="{context['page_title']}">
         <meta property="og:description" content="{context['description']}">
@@ -374,17 +375,17 @@ def general_part_return(part_number: int,
         <footer id="bottom">
             <div class="footer-left">
                 <div class="footer-container">
-                    <a href="https://www.youtube.com/@SableFiSh">
+                    <a href="{data['youtube_link']}">
                         <div>
                             Youtube
                         </div>
                     </a>
-                    <a href="https://space.bilibili.com/49323671">
+                    <a href="{data['bilibili_link']}">
                         <div>
                             Bilibili
                         </div>
                     </a>
-                    <a href="https://www.artstation.com/sablefish">
+                    <a href="{data['artstation_link']}">
                         <div>
                             ArtStation
                         </div>
