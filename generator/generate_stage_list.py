@@ -1,8 +1,7 @@
 import sys
 import re
 from pathlib import Path
-from generator.generator_help_functions import *
-sys.stdout.reconfigure(encoding='utf-8') # type: ignore
+from generator.generator_help_functions import save_temp_file, delete_temp_file, restore_temp_file, general_part_return, get_txt_file_path
 
 
 def get_stage_list_path() -> list[Path]:
