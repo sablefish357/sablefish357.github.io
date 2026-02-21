@@ -2,8 +2,7 @@ import sys
 from pathlib import Path
 import eyed3
 import logging
-from generator.generator_help_functions import *
-sys.stdout.reconfigure(encoding='utf-8') # type: ignore
+from generator.generator_help_functions import save_temp_file, delete_temp_file, restore_temp_file, general_part_return
 
 logging.getLogger("eyed3").setLevel(logging.ERROR)
 
@@ -44,9 +43,8 @@ def write_music_list_head() -> None:
             file.write(music_list_part_return(1))
 
     except Exception as e:
-        print(f"Error: When writing head for music_list.")
-        raise e
-
+        logging.exception(f"Error: When writing head for music_list.")
+        raise
 
 def generate_music_picture(music_path: Path) -> Path | None:
     """
@@ -57,13 +55,13 @@ def generate_music_picture(music_path: Path) -> Path | None:
     """
 
     cover_path = get_music_folder_path() / "cover"
-    cover_path.mkdir(exist_ok=True)
-
+    
     cover_file = cover_path / (music_path.stem + ".jpg")
     if cover_file.exists():
         return cover_file
     
     try:
+        cover_path.mkdir(exist_ok=True)
         audio_file = eyed3.load(music_path)
         if ((audio_file is None) or (audio_file.tag is None) or 
             (not audio_file.tag.images)): # type: ignore
@@ -76,6 +74,7 @@ def generate_music_picture(music_path: Path) -> Path | None:
         return cover_file
     
     except Exception as e:
+        logging.exception(f"Error: When generating cover for music {music_path.name}.")
         return None
         
 
@@ -104,6 +103,7 @@ def get_body_part_of_music_list(music_path: Path, music_cover: Path,
         title = title.strip()
         
     except Exception as e:
+        logging.exception(f"Error: When getting metadata for music {music_path.name}.")
         return None
     
     if is_first:
@@ -172,6 +172,7 @@ def get_all_music_files() -> list[Path]:
             else:
                 return int('inf')
         except Exception as e:
+            logging.exception(f"Error: When extracting track number from {music_file.name}.")
             return int('inf')
 
     music_files.sort(key=get_track_number)
@@ -191,14 +192,14 @@ def write_music_list_body() -> int:
     music_files = get_all_music_files()
 
     if not music_files:
-        print("Error: No music files found in the music folder.")
+        logging.error("Error: No music files found in the music folder.")
         return 0
     
     for i, music in enumerate(music_files):
         music_cover = generate_music_picture(music)
 
         if music_cover is None:
-            print(f"Error: Skipping {music.name} due to missing cover.")
+            logging.error(f"Error: Skipping {music.name} due to missing cover.")
             continue
 
         if i == 0:
@@ -208,7 +209,7 @@ def write_music_list_body() -> int:
             body_part = get_body_part_of_music_list(music, music_cover)
 
         if body_part is None:
-            print(f"Error: Skipping {music.name} due to missing metadata.")
+            logging.error(f"Error: Skipping {music.name} due to missing metadata.")
             continue
 
         try:
@@ -221,8 +222,8 @@ def write_music_list_body() -> int:
             s_number += 1
 
         except Exception as e:
-            print(f"Error: When writing body for music {music.name}.")
-            raise e
+            logging.exception(f"Error: When writing body for music {music.name}.")
+            raise
         
     return s_number
 
@@ -243,8 +244,8 @@ def write_music_list_tail() -> None:
             file.write(music_list_part_return(2))
 
     except Exception as e:
-        print(f"Error: When writing tail for music_list.")
-        raise e
+        logging.exception(f"Error: When writing tail for music_list.")
+        raise
 
 
 def music_list_part_return(part_number: int) -> str:
@@ -276,11 +277,11 @@ def generate_music_list() -> None:
         s_number = write_music_list_body()
         write_music_list_tail()
         delete_temp_file(get_music_list_path())
-        print(f"Added {s_number} music(s) to the music list.")
+        logging.info(f"Added {s_number} music(s) to the music list.")
     except Exception as e:
-        print(f"Error: When generating music list: {e}")
+        logging.exception(f"Error: When generating music list: {e}")
         restore_temp_file(get_music_list_path())
-        print("Restored the backup file.")
+        logging.info("Restored the backup file.")
         sys.exit(1)
 
 

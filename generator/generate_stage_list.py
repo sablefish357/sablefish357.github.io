@@ -1,8 +1,8 @@
 import sys
 import re
 from pathlib import Path
-from generator.generator_help_functions import *
-sys.stdout.reconfigure(encoding='utf-8') # type: ignore
+import logging
+from generator.generator_help_functions import save_temp_file, delete_temp_file, restore_temp_file, general_part_return, get_txt_file_path
 
 
 def get_stage_list_path() -> list[Path]:
@@ -32,8 +32,8 @@ def write_stage_list_head() -> None:
             file.write(stage_list_part_return(1))
 
     except Exception as e:
-        print(f"Error: When writing head for stage_list.")
-        raise e
+        logging.exception(f"Error: When writing head for stage_list.")
+        raise
 
 def get_body_part_of_stage_list(folder_path: Path, is_first: bool = False) -> list[str]:
     """
@@ -58,8 +58,18 @@ def get_body_part_of_stage_list(folder_path: Path, is_first: bool = False) -> li
 
     txt_path = get_txt_file_path(folder_path)
 
-    file = txt_path[0].read_text(encoding="utf-8").splitlines()
-    file_zh = txt_path[1].read_text(encoding="utf-8").splitlines()
+    try:
+        file = txt_path[0].read_text(encoding="utf-8").splitlines()
+        file_zh = txt_path[1].read_text(encoding="utf-8").splitlines()
+
+        if len(file) < 2 or len(file_zh) < 2:
+            error_message = "Error: Txt file does not have enough lines for stage list body." + str(folder_path)
+            logging.error(error_message)
+            raise ValueError(error_message)
+        
+    except Exception as e:
+        logging.exception(f"Error: When reading txt file for stage list {folder_path.name}.")
+        raise
 
     title_match = t_re.match(file[0])
     title_match_zh = t_re.match(file_zh[0])
@@ -68,7 +78,9 @@ def get_body_part_of_stage_list(folder_path: Path, is_first: bool = False) -> li
         title = title_match.group("title")
         title_zh = title_match_zh.group("title")
     else:
-        raise ValueError("Error: Title not found in the txt file." + str(folder_path))
+        error_message = "Error: Title not found in the txt file." + str(folder_path)
+        logging.error(error_message)
+        raise ValueError(error_message)
     
     date = folder_path.name
 
@@ -83,7 +95,9 @@ def get_body_part_of_stage_list(folder_path: Path, is_first: bool = False) -> li
         image_name_zh = image_match_zh.group("image_name")
         description_zh = image_match_zh.group("description")
     else:
-        raise ValueError("Error: Image not found in the txt file." + str(folder_path))
+        error_message = "Error: Image not found in the txt file." + str(folder_path)
+        logging.error(error_message)
+        raise ValueError(error_message)
 
     if is_first:
         stage_list_class = "stagecontainer firststagecontainer"
@@ -157,7 +171,7 @@ def get_all_stage_folders() -> list[Path]:
             m, d, y = map(int, folder.name.split('-'))
             return (y, m, d)
         except Exception as e:
-            print(f"Error: When parsing date from folder {folder.name}.")
+            logging.exception(f"Error: When parsing date from folder {folder.name}.")
             return (9999, 99, 99)
         
     folder_list.sort(key=folder_date_key)
@@ -193,8 +207,8 @@ def write_stage_list_body() -> int:
             l_number += 1
 
         except Exception as e:
-            print(f"Error: When writing body for stage_list {folder.name}.")
-            raise e
+            logging.exception(f"Error: When writing body for stage_list {folder.name}.")
+            raise
 
     return l_number
 
@@ -215,8 +229,8 @@ def write_stage_list_tail() -> None:
         with open(path_list[1], "a", encoding="utf-8") as file:
             file.write(stage_list_part_return(3))
     except Exception as e:
-        print(f"Error: When writing tail for stage_list.")
-        raise e
+        logging.exception(f"Error: When writing tail for stage_list.")
+        raise
 
 
 def stage_list_part_return(part_number: int) -> str:
@@ -249,11 +263,11 @@ def generate_stage_list() -> None:
         l_number = write_stage_list_body()
         write_stage_list_tail()
         delete_temp_file(get_stage_list_path())
-        print(f"Added {l_number} stage(s) to the stage list")
+        logging.info(f"Added {l_number} stage(s) to the stage list")
     except Exception as e:
-        print(f"Error: When generating stage list: {e}.")
+        logging.exception(f"Error: When generating stage list: {e}.")
         restore_temp_file(get_stage_list_path())
-        print("Restored the backup file.")
+        logging.info("Restored the backup file.")
         sys.exit(1)
 
 

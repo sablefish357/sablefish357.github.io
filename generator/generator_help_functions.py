@@ -1,4 +1,5 @@
 from pathlib import Path
+import logging
 import re
 
 def save_temp_file(file_path: list[Path]) -> None:
@@ -15,8 +16,8 @@ def save_temp_file(file_path: list[Path]) -> None:
                 backup_path = file.with_suffix('.bak')
                 file.rename(backup_path)
             except Exception as e:
-                print(f"Error: When creating backup for {file.name}: {e}")
-                raise e
+                logging.exception(f"Error: When creating backup for {file.name}: {e}")
+                raise
             
 
 def restore_temp_file(file_path: list[Path]) -> None:
@@ -35,8 +36,8 @@ def restore_temp_file(file_path: list[Path]) -> None:
                 file.unlink(missing_ok=True)
                 backup_path.rename(file)
             except Exception as e:
-                print(f"Error: When restoring {file.name} from backup: {e}")
-                raise e
+                logging.exception(f"Error: When restoring {file.name} from backup: {e}")
+                raise
             
             
 def delete_temp_file(file_path: list[Path]) -> None:
@@ -53,8 +54,8 @@ def delete_temp_file(file_path: list[Path]) -> None:
             try:
                 backup_path.unlink(missing_ok=True)
             except Exception as e:
-                print(f"Error: When deleting backup {backup_path.name}: {e}")
-                raise e
+                logging.exception(f"Error: When deleting backup {backup_path.name}: {e}")
+                raise
 
 
 def get_html_file_path(folder_path: Path) -> list[Path]:
@@ -107,8 +108,18 @@ def get_title_from_folder(folder_path: Path) -> tuple[str, str]:
 
     txt_path = get_txt_file_path(folder_path)
 
-    file = txt_path[0].read_text(encoding="utf-8").splitlines()
-    file_zh = txt_path[1].read_text(encoding="utf-8").splitlines()
+    try:
+        file = txt_path[0].read_text(encoding="utf-8").splitlines()
+        file_zh = txt_path[1].read_text(encoding="utf-8").splitlines()
+
+        if len(file) < 1 or len(file_zh) < 1:
+            error_message = "Error: Txt file does not have enough lines for title." + str(folder_path)
+            logging.error(error_message)
+            raise ValueError(error_message)
+        
+    except Exception as e:
+        logging.exception(f"Error: When reading txt file for title {folder_path.name}.")
+        raise
 
     title_match = t_re.match(file[0])
     title_match_zh = t_re.match(file_zh[0])
@@ -117,7 +128,9 @@ def get_title_from_folder(folder_path: Path) -> tuple[str, str]:
         title = title_match.group("title")
         title_zh = title_match_zh.group("title")
     else:
-        raise ValueError("Error: Title not found in the txt file." + str(folder_path))
+        error_message = "Error: Title not found in the txt file." + str(folder_path)
+        logging.error(error_message)
+        raise ValueError(error_message)
     
     return (title, title_zh)
 
@@ -137,7 +150,17 @@ def get_title_image_from_folder(file_path: str) -> str:
 
     txt_path = Path("." + file_path + ".txt")
 
-    file = txt_path.read_text(encoding="utf-8").splitlines()
+    try:
+        file = txt_path.read_text(encoding="utf-8").splitlines()
+
+        if len(file) < 2:
+            error_message = "Error: Txt file does not have enough lines for image." + str(txt_path)
+            logging.error(error_message)
+            raise ValueError(error_message)
+        
+    except Exception as e:
+        logging.exception(f"Error: When reading txt file for title image {txt_path.name}.")
+        raise
 
     image_match = i_re.match(file[1])
 
@@ -145,7 +168,9 @@ def get_title_image_from_folder(file_path: str) -> str:
         image_name = image_match.group("image_name")
         return image_name
     else:
-        raise ValueError("Error: Image not found in the txt file." + file_path)
+        error_message = "Error: Image not found in the txt file." + file_path
+        logging.error(error_message)
+        raise ValueError(error_message)
     
 def get_og_image_url(file_path: str) -> str:
     """
@@ -178,7 +203,9 @@ def get_og_image_url(file_path: str) -> str:
         image_name = get_title_image_from_folder(file_path)
         return base_url + f"/blogs/{file_path.split('/')[-1]}/{image_name}"
     
-    raise ValueError("Error: Unrecognized file path for og image url." + file_path)
+    error_message = "Error: Unrecognized file path for og image url." + file_path
+    logging.error(error_message)
+    raise ValueError(error_message)
 
 def general_part_return(part_number: int, 
                         file_path: str, 
@@ -393,5 +420,5 @@ def general_part_return(part_number: int,
             raise ValueError("Error: Wrong part number.")
 
 if __name__ == "__main__":
-    print("This module is not meant to be run directly. It contains helper " +  
+    logging.info("This module is not meant to be run directly. It contains helper " +  
           "functions for generating music and blog pages and lists.")
