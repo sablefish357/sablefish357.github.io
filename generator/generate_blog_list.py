@@ -89,8 +89,12 @@ def get_body_part_of_blog_list(folder_path: Path, is_first: bool = False) -> lis
 
     txt_path = get_txt_file_path(folder_path)
 
-    file = txt_path[0].read_text(encoding="utf-8").splitlines()
-    file_zh = txt_path[1].read_text(encoding="utf-8").splitlines()
+    try:
+        file = txt_path[0].read_text(encoding="utf-8").splitlines()
+        file_zh = txt_path[1].read_text(encoding="utf-8").splitlines()
+    except Exception as e:
+        logging.exception(f"Error: When reading txt file for blog list {folder_path.name}.")
+        raise
 
     title_match = t_re.match(file[0])
     title_match_zh = t_re.match(file_zh[0])

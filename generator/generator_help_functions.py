@@ -108,8 +108,18 @@ def get_title_from_folder(folder_path: Path) -> tuple[str, str]:
 
     txt_path = get_txt_file_path(folder_path)
 
-    file = txt_path[0].read_text(encoding="utf-8").splitlines()
-    file_zh = txt_path[1].read_text(encoding="utf-8").splitlines()
+    try:
+        file = txt_path[0].read_text(encoding="utf-8").splitlines()
+        file_zh = txt_path[1].read_text(encoding="utf-8").splitlines()
+
+        if len(file) < 1 or len(file_zh) < 1:
+            error_message = "Error: Txt file does not have enough lines for title." + str(folder_path)
+            logging.error(error_message)
+            raise ValueError(error_message)
+        
+    except Exception as e:
+        logging.exception(f"Error: When reading txt file for title {folder_path.name}.")
+        raise
 
     title_match = t_re.match(file[0])
     title_match_zh = t_re.match(file_zh[0])
@@ -140,7 +150,17 @@ def get_title_image_from_folder(file_path: str) -> str:
 
     txt_path = Path("." + file_path + ".txt")
 
-    file = txt_path.read_text(encoding="utf-8").splitlines()
+    try:
+        file = txt_path.read_text(encoding="utf-8").splitlines()
+
+        if len(file) < 2:
+            error_message = "Error: Txt file does not have enough lines for image." + str(txt_path)
+            logging.error(error_message)
+            raise ValueError(error_message)
+        
+    except Exception as e:
+        logging.exception(f"Error: When reading txt file for title image {txt_path.name}.")
+        raise
 
     image_match = i_re.match(file[1])
 

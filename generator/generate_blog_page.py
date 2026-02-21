@@ -53,7 +53,7 @@ def txt_to_body_translate(folder_path: Path, file_path: Path) -> tuple[str, int,
     try:
         file = file_path.read_text(encoding="utf-8").splitlines()
     except Exception as e:
-        logging.exception(f"Error: When reading file {file_path.name}.")
+        logging.exception(f"Error: When reading txt file for blog page {file_path.name}.")
         raise
     
     body = ""

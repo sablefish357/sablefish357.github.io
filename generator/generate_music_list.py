@@ -55,13 +55,13 @@ def generate_music_picture(music_path: Path) -> Path | None:
     """
 
     cover_path = get_music_folder_path() / "cover"
-    cover_path.mkdir(exist_ok=True)
-
+    
     cover_file = cover_path / (music_path.stem + ".jpg")
     if cover_file.exists():
         return cover_file
     
     try:
+        cover_path.mkdir(exist_ok=True)
         audio_file = eyed3.load(music_path)
         if ((audio_file is None) or (audio_file.tag is None) or 
             (not audio_file.tag.images)): # type: ignore

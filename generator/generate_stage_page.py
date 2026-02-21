@@ -53,7 +53,7 @@ def readme_translate(readme_file: Path) -> str:
     try:
         file = readme_file.read_text(encoding="utf-8").splitlines()
     except Exception as e:
-        logging.exception(f"Error: When reading file {readme_file.name}.")
+        logging.exception(f"Error: When reading readme file for stage page {readme_file.name}.")
         raise
 
     for line in file:
@@ -114,7 +114,7 @@ def txt_to_stage_body_translate(folder_path: Path, file_path: Path,
     try:
         file = file_path.read_text(encoding="utf-8").splitlines()
     except Exception as e:
-        logging.exception(f"Error: When reading file {file_path.name}.")
+        logging.exception(f"Error: When reading txt file for stage page {file_path.name}.")
         raise
     
     image_part = ""
