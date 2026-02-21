@@ -1,7 +1,23 @@
 from pathlib import Path
 import logging
 import re
+import json
 
+def load_data_json(json_path: Path = Path("./generator/data.json")) -> dict:
+    """
+    Load a json file and return the data as a dictionary.
+
+    :param json_path: the path of the json file
+    :return: the data as a dictionary
+    """
+    try:
+        with open(json_path, "r", encoding="utf-8") as file:
+            data = json.load(file)
+            return data
+    except Exception as e:
+        logging.exception(f"Error: When loading data from {json_path.name}.")
+        raise
+    
 def save_temp_file(file_path: list[Path]) -> None:
     """
     Save old file if exists as .bak file
@@ -180,8 +196,7 @@ def get_og_image_url(file_path: str) -> str:
     :return: the og image url
     """
 
-    
-    base_url = "https://sablefish357.github.io"
+    base_url = load_data_json()['web_domain']
 
     if file_path == "/index":
         return base_url + "/image/og_image_index.jpg"
@@ -223,6 +238,8 @@ def general_part_return(part_number: int,
     :return: str of head or tail
     """
 
+    data = load_data_json()
+
     is_en = part_number in [0, 2]
 
     if file_path == "/index":
@@ -237,10 +254,10 @@ def general_part_return(part_number: int,
         "page_title" : page_title[0] if is_en else page_title[1],
         "description" : description[0] if is_en else description[1],
 
-        "alt_link_en" : (f"https://sablefish357.github.io{file_path}.html" 
-                         if not is_main_page else "https://sablefish357.github.io/"),
-        "alt_link_zh" : (f"https://sablefish357.github.io{file_path}-zh.html"
-                         if not is_main_page else "https://sablefish357.github.io/index-zh.html"),
+        "alt_link_en" : (f"{data['web_domain']}{file_path}.html" 
+                         if not is_main_page else f"{data['web_domain']}/"),
+        "alt_link_zh" : (f"{data['web_domain']}{file_path}-zh.html"
+                         if not is_main_page else f"{data['web_domain']}/index-zh.html"),
 
         "nav_video" : "VIDEOS" if is_en else "视频",
         "nav_video_link" : ("https://www.youtube.com/@SableFiSh" 
