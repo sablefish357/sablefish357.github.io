@@ -61,6 +61,12 @@ def get_body_part_of_stage_list(folder_path: Path, is_first: bool = False) -> li
     try:
         file = txt_path[0].read_text(encoding="utf-8").splitlines()
         file_zh = txt_path[1].read_text(encoding="utf-8").splitlines()
+
+        if len(file) < 2 or len(file_zh) < 2:
+            error_message = "Error: Txt file does not have enough lines for stage list body." + str(folder_path)
+            logging.error(error_message)
+            raise ValueError(error_message)
+        
     except Exception as e:
         logging.exception(f"Error: When reading txt file for stage list {folder_path.name}.")
         raise
